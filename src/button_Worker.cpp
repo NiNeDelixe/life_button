@@ -1,5 +1,30 @@
 #include "externals/button/Worker.hpp"
 
-button::Worker::Worker()
+button::Worker::Worker(callback_t on_press, callback_t on_release)
 {
+    pinMode(ESP_EXTERNAL_BUTTON_PIN, INPUT_PULLUP);
+    last_state = digitalRead(ESP_EXTERNAL_BUTTON_PIN);
+}
+void button::Worker::update()
+{
+    bool currentState = digitalRead(ESP_EXTERNAL_BUTTON_PIN);
+
+    if (currentState != last_state) 
+    {
+        if (currentState == LOW) 
+        {
+            if (on_press) 
+            {
+                on_press();
+            }
+        } 
+        else 
+        {
+            if (on_release) 
+            {
+                on_release();
+            }
+        }
+        last_state = currentState;
+    }
 }

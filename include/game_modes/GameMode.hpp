@@ -9,6 +9,9 @@ public:
     GameMode() = default;
     virtual ~GameMode() = default;
 
+public:
+    virtual void tick() = 0;
+
 private:
     
 };

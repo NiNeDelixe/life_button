@@ -8,8 +8,8 @@ constexpr pin_t ESP_CIRCUIT_BLUE_LED_PIN = 8;
 constexpr pin_t ESP_EXTERNAL_BUTTON_PIN = 1;
 constexpr pin_t ESP_EXTERNAL_BUTTON_LED_PIN = 0;
 
-constexpr pin_t ESP_EXTERNAL_DIGIT_DISPLAY_ELK_PIN = 2;
-constexpr pin_t ESP_EXTERNAL_DIGIT_DISPLAY_D_PIN = 3;
+constexpr pin_t ESP_EXTERNAL_DIGIT_DISPLAY_CLK_PIN = 2;
+constexpr pin_t ESP_EXTERNAL_DIGIT_DISPLAY_DIO_PIN = 3;
 
 constexpr pin_t ESP_EXTERNAL_BEEPER_PIN = 6;
 

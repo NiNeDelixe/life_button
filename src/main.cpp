@@ -2,15 +2,14 @@
 
 #include "core/Constants.hpp"
 
-#include "core/StartUp.hpp"
-#include "core/Loop.hpp"
+#include "core/Polling.hpp"
 
 void setup() 
 {
-  	startUp();
+  	Polling::startUp();
 }
 
 void loop() 
 {
-  	poll();
+  	Polling::poll();
 }
