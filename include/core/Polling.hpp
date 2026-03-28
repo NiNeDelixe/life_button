@@ -3,8 +3,7 @@
 
 #include "core.hpp"
 
-#include "externals/led_display/Worker.hpp"
-#include "externals/button/Worker.hpp"
+#include "game_modes/lifes/Lifes.hpp"
 
 class Polling
 {
@@ -19,8 +18,7 @@ public:
     static void delay(esp_time_t time);
 
 private:
-    static led_display::Worker led_display_worker;
-    static button::Worker button_worker;
+    static Lifes lifes;
 };
 
 #endif  // CORE_STARTUP_HPP_

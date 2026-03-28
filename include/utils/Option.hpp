@@ -17,7 +17,7 @@ public:
 public:
 
 
-private:
+protected:
     T value;
 };
 
@@ -25,6 +25,7 @@ class IntOption : public IOption<int>
 {
 public:
     IntOption() = default;
+    IntOption(int value) { this->value = value; }
     ~IntOption() = default;
 
 private:
@@ -35,6 +36,7 @@ class TimeOption : public IOption<esp_time_t>
 {
 public:
     TimeOption() = default;
+    TimeOption(esp_time_t value) { this->value = value; }
     ~TimeOption() = default;
 
 private:

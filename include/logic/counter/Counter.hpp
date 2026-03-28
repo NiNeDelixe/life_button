@@ -11,8 +11,8 @@ public:
 
 public:
 
-private:
-    
+public:
+    int16_t count; 
 };
 
 #endif  // COUNTER_COUNTER_HPP_

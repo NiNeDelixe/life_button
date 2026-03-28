@@ -6,10 +6,28 @@
 
 void setup() 
 {
-  	Polling::startUp();
+	Serial.print("Programm Statring!");
+
+	try
+	{
+		Polling::startUp();
+	}
+	catch(const std::exception& e)
+	{
+		Serial.print("exception!!!");
+		Serial.print(e.what());
+	}
 }
 
 void loop() 
 {
-  	Polling::poll();
+	try
+	{
+		Polling::poll();
+	}
+	catch(const std::exception& e)
+	{
+		Serial.print("exception!!!");
+		Serial.print(e.what());
+	}
 }

@@ -10,7 +10,8 @@ public:
     virtual ~GameMode() = default;
 
 public:
-    virtual void tick() = 0;
+    virtual void start() = 0;
+    virtual void update() = 0;
 
 private:
     

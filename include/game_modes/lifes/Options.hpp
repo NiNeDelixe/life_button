@@ -8,7 +8,7 @@
 struct LifesOptions
 {
     TimeOption timer_option;
-    IntOption lifes_option;
+    IntOption lifes_option = IntOption(100);
 };
 
 #endif  // LIFES_OPTIONS_HPP_

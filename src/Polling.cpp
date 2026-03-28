@@ -1,23 +1,15 @@
 #include "core/Polling.hpp"
 
-led_display::Worker Polling::led_display_worker = led_display::Worker();
-button::Worker Polling::button_worker = button::Worker(nullptr, nullptr);
+Lifes Polling::lifes = Lifes();
 
 void Polling::startUp()
 {
-    auto onPress = []() {
-        led_display_worker.setText("PRES");
-    };
-    auto onRelease = []() {
-        led_display_worker.setText("RELE");
-    };
-    button_worker.setOnPress(onPress);
-    button_worker.setOnRelease(onRelease);
+    lifes.start();
 }
 
 void Polling::poll()
 {
-    button_worker.update();
+    lifes.update();
 }
 void Polling::delay(esp_time_t time)
 {
