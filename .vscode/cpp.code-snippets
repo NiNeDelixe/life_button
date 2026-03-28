@@ -1,0 +1,32 @@
+{
+    "Create base class": {
+        "prefix": "classard",
+        "body": [
+            "#include \"core/core.hpp\"",
+            "",
+            "class ${1:$TM_FILENAME_BASE}",
+            "{",
+            "public:",
+            "    ${1:$TM_FILENAME_BASE}() = default;",
+            "    ~${1:$TM_FILENAME_BASE}() = default;",
+            "",
+            "private:",
+            "    $0",
+            "};"
+        ]
+    },
+    "Create class": {
+        "prefix": "classardw",
+        "body": [
+            "class ${1:$TM_FILENAME_BASE}",
+            "{",
+            "public:",
+            "    ${1:$TM_FILENAME_BASE}() = default;",
+            "    ~${1:$TM_FILENAME_BASE}() = default;",
+            "",
+            "private:",
+            "    $0",
+            "};"
+        ]
+    }
+}

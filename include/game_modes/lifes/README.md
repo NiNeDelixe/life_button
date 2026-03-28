@@ -1,0 +1,1 @@
+Game mode where count lifes setting in options and countdown every button click
