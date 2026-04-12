@@ -29,4 +29,6 @@ private:
     uint8_t blank[4] = { 0x00, 0x00, 0x00, 0x00 };
 };
 
+static led_display::Worker _led_display = {};
+
 #endif  // LED_DISPLAY_WORKER_HPP_

@@ -2,57 +2,42 @@
 
 #include "core/Polling.hpp"
 
-Counter Lifes::lifes_counter = Counter();
 LifesOptions Lifes::options = LifesOptions();
 
 void Lifes::start()
 {
-    led_display_worker = led_display::Worker();
+    buton.setOnPress(&Lifes::onPress);
+    buton.setOnRelease(&Lifes::onRelease);
 
-#ifdef USE_STL_CODE
-    button_worker.setOnPress(std::bind(&Lifes::onPress, &lifes));
-    button_worker.setOnRelease(std::bind(&Lifes::onRelease, &lifes));
-#else
-    button_worker.setOnPress(&Lifes::onPress);
-    button_worker.setOnRelease(&Lifes::onRelease);
-#endif
-
-    applyToCounter(options.lifes_option.get(), operators::SET);
+    applyToCounter(options.lifes_option.get(), Counter::operators::SET);
 }
 
 void Lifes::update()
 {
-    button_worker.update();
-    led_display_worker.setNumber(lifes_counter.count);
+    buton.update();
+    _led_display.setNumber(m_counter.count);
+
+    if (m_counter.count <= 0)
+    {
+        this->is_dead = true;
+    }
+
+    if (is_dead && !is_beep)
+    {
+        _button_led.setState(true);
+        _beeper.beepSeconds(5000);
+        is_beep = true;
+    }
+    
 }
 
 void Lifes::onPress()
 {
-    Serial.print("life button pressed");
-    applyToCounter(1, operators::DIV);
+    LOG(DEBUG, "life button pressed");
+    applyToCounter(1, Counter::operators::DIV);
 }
 
 void Lifes::onRelease()
 {
-    Serial.print("life button release");
-}
-
-void Lifes::applyToCounter(int num, const operators &oper)
-{
-    switch (oper)
-    {
-    case operators::ADD:
-        lifes_counter.count += num;
-        break;
-    case operators::DIV:
-        lifes_counter.count -= num;
-        break;
-    case operators::SET:
-        lifes_counter.count = num;
-        break;
-    
-    default:
-        break;
-    }
-     
+    LOG(DEBUG, "life button release");
 }

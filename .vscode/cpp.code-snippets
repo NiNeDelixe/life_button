@@ -28,5 +28,53 @@
             "    $0",
             "};"
         ]
+    },
+    "Create Worker class": {
+        "prefix": "classworker",
+        "body": [
+            "#include \"core/core.hpp\"",
+            "",
+            "#include \"externals/IWorker.hpp\"",
+            "",
+            "namespace led_display",
+            "{",
+            "    class ${1:$TM_FILENAME_BASE};",
+            "}",
+            "",
+            "class led_display::${1:$TM_FILENAME_BASE} : public IWorker",
+            "{",
+            "public:",
+            "    ${1:$TM_FILENAME_BASE}();",
+            "    ~${1:$TM_FILENAME_BASE}() = default;",
+            "",
+            "public:",
+            "    void update() override;",
+            "",
+            "private:",
+            "",
+            "};"
+        ]
+    },
+    "Create class gamemode":{
+        "prefix": "gamemode",
+        "body": [
+            "#include \"core/core.hpp\"",
+            "",
+            "#include \"game_modes/GameMode.hpp\"",
+            "",
+            "class ${1:$TM_FILENAME_BASE} : public GameMode",
+            "{",
+            "public:",
+            "    ${1:$TM_FILENAME_BASE}() = default;",
+            "    ~${1:$TM_FILENAME_BASE}() = default;",
+            "",
+            "public:",
+            "    void start() override;",
+            "    void update() override;",
+            "",
+            "private:",
+            "",
+            "};"
+        ]
     }
 }

@@ -4,7 +4,9 @@ led_display::Worker::Worker()
     : display(TM1637Display(ESP_EXTERNAL_DIGIT_DISPLAY_CLK_PIN, ESP_EXTERNAL_DIGIT_DISPLAY_DIO_PIN))
 {
     display.setBrightness(0x0f);
+    clear();
 }
+
 void led_display::Worker::setText(const char *text, size_t length)
 {
     if (length == 0)

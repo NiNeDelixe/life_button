@@ -1,9 +1,23 @@
-#ifndef CORE_STARTUP_HPP_
-#define CORE_STARTUP_HPP_
+#ifndef CORE_POLLING_HPP_
+#define CORE_POLLING_HPP_
 
 #include "core.hpp"
 
+#include <GTimer.h>
+
+#include "game_modes/GameModesManager.hpp"
 #include "game_modes/lifes/Lifes.hpp"
+#include "game_modes/bomb/Bomb.hpp"
+
+#include "externals/beeper/Worker.hpp"
+#include "externals/button/led/Worker.hpp"
+#include "externals/button/Worker.hpp"
+#include "externals/led_bar/Worker.hpp"
+#include "externals/led_strip/Worker.hpp"
+#include "externals/led_display/Worker.hpp"
+
+#include "web/WebInterface.hpp"
+
 
 class Polling
 {
@@ -17,8 +31,9 @@ public:
 
     static void delay(esp_time_t time);
 
-private:
-    static Lifes lifes;
+public:
+    static Lifes temp_lf;
+    static GameModesManager mode_manager;
 };
 
-#endif  // CORE_STARTUP_HPP_
+#endif  // CORE_POLLING_HPP_

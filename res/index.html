@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Game Modes</title>
+
+    <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+
+<div class="card">
+    <h2>Режим игры</h2>
+
+    <select id="mode" onchange="loadSettings()">
+        <option value="0">Bomb</option>
+        <option value="1">KOTH</option>
+        <option value="2">Lifes</option>
+        <option value="3">Point</option>
+    </select>
+
+    <div id="settings"></div>
+
+    <button onclick="save()">Сохранить</button>
+</div>
+
+<script>
+    function loadSettings() {
+        let mode = document.getElementById("mode").value;
+
+        fetch("/mode?type=" + mode)
+            .then(r => r.json())
+            .then(data => {
+                let html = "";
+
+                for (let key in data) {
+                    html += `
+                        <div>
+                            <label>${key}</label>
+                            <input type="number" id="${key}" value="${data[key]}">
+                        </div>
+                    `;
+                }
+
+                document.getElementById("settings").innerHTML = html;
+            });
+    }
+
+    function save() {
+        let mode = document.getElementById("mode").value;
+        let inputs = document.querySelectorAll("#settings input");
+
+        let params = `type=${mode}`;
+
+        inputs.forEach(i => {
+            params += `&${i.id}=${i.value}`;
+        });
+
+        fetch("/setMode?" + params);
+    }
+
+    loadSettings();
+</script>
+
+</body>
+</html>

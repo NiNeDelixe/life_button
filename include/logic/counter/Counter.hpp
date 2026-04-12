@@ -6,6 +6,14 @@
 class Counter
 {
 public:
+    enum class operators
+    {
+        ADD,
+        DIV,
+        SET
+    };
+
+public:
     Counter() = default;
     ~Counter() = default;
 

@@ -29,6 +29,8 @@ public:
     void setOnPress(callback_t callback) { on_press = callback; }
     void setOnRelease(callback_t callback) { on_release = callback; }
 
+    bool isPressed() const { return is_pressed; }
+
 public:
     void update() override;
 
@@ -36,6 +38,9 @@ private:
     callback_t on_press;
     callback_t on_release;
     bool last_state;
+    bool is_pressed = false;
 };
+
+static button::Worker _button = button::Worker(nullptr, nullptr);
 
 #endif  // BUTTON_WORKER_HPP_

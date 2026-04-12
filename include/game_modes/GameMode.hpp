@@ -3,6 +3,14 @@
 
 #include "core/core.hpp"
 
+enum class GameModeType : uint8_t
+{
+    BOMB,
+    KOTH,
+    LIFES,
+    POINT
+};
+
 class GameMode
 {
 public:

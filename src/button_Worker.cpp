@@ -16,6 +16,7 @@ void button::Worker::update()
             if (on_press) 
             {
                 Serial.print("button pressed");
+                is_pressed = true;
                 on_press();
             }
         } 
@@ -24,6 +25,7 @@ void button::Worker::update()
             if (on_release) 
             {
                 Serial.print("button release");
+                is_pressed = false;
                 on_release();
             }
         }

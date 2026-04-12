@@ -1,16 +1,35 @@
 #include "core/Polling.hpp"
 
-Lifes Polling::lifes = Lifes();
+GameModesManager Polling::mode_manager = {};
+Lifes Polling::temp_lf = {};
 
 void Polling::startUp()
 {
-    lifes.start();
+    _led_bar.turnOn();
+    _beeper.singleBeep();
+    _led_circuit.singleRun();
+    _interface.onStart();
+    _led_bar.turnOff();
+    _led_display.clear();
+
+    temp_lf.start();
+    //mode_manager.crateGameMode(GameModeType::LIFES);
 }
 
 void Polling::poll()
 {
-    lifes.update();
+    _interface.update();
+    _led_circuit.update();
+    _button_led.update();
+    _beeper.update();
+    _led_bar.update();
+    _led_strip.update();
+    _button.update();
+    
+    temp_lf.update();
+    //mode_manager.m_current_gamemode->update();
 }
+
 void Polling::delay(esp_time_t time)
 {
     vTaskDelay(time / portTICK_PERIOD_MS);
