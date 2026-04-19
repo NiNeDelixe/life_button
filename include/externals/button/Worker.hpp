@@ -23,6 +23,7 @@ class button::Worker : public IWorker
 {
 public:
     Worker(callback_t on_press, callback_t on_release);
+    Worker();
     ~Worker() = default;
 
 public:

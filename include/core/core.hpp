@@ -25,7 +25,7 @@ using esp_millis_t = uint32_t;
 
 #define LOG(severinity, message) Serial.println(T([severinity]: message));
 
-#define DIGITAL_OUTPUT LOW
+#define DIGITAL_OUTPUT HIGH
 
 #define BEEPER_DIGITAL_OUTPUT DIGITAL_OUTPUT
 

@@ -27,7 +27,7 @@ void Polling::poll()
     _button.update();
     
     temp_lf.update();
-    //mode_manager.m_current_gamemode->update();
+    //mode_manager.update();
 }
 
 void Polling::delay(esp_time_t time)

@@ -31,13 +31,13 @@ void web::WebInterface::onStart()
     server.on("/set", HTTP_GET, [](AsyncWebServerRequest *request){
         if (request->hasParam("value")) {
             int v = request->getParam("value")->value().toInt();
-            //Polling::lifes.applyToCounter(v, Counter::operators::SET);
+            Polling::temp_lf.applyToCounter(v, Counter::operators::SET);
         }
         request->send(200, "text/plain", "OK");
     });
 
     server.on("/get", HTTP_GET, [](AsyncWebServerRequest *request){
-        //int v = Polling::lifes.getCount();
+        int v = Polling::temp_lf.getCount();
         request->send(200, "text/plain", String());
     });
 

@@ -5,69 +5,96 @@
 void Bomb::start()
 {
     _led_display.clear();
-    _led_display.setNumber(options.plant_option.get() / 100);
-    _button.setOnPress(&Bomb::onPress);
-    _button.setOnRelease(&Bomb::onRelease);
+    // _button.setOnPress(&Bomb::onPress);
+    // _button.setOnRelease(&Bomb::onRelease);
+    but.setOnPress(&Bomb::onPress);
+    but.setOnRelease(&Bomb::onRelease);
+
+    current_plant_time = 0;
+    current_timer = 0;
+    current_defusing_time = 0;
+
+    planted = false;
+    explode = false;
+    defused = false;
+    is_beepd = false;
 }
 
 void Bomb::update()
 {
+    but.update();
     if (defused)
     {
         _beeper.beepSeconds(1000);
-        defused = false;
-        explode = false;
-        planted = false;
+        start();
         return;
     }
-    
 
     if (explode)
     {
         _beeper.beepSeconds(10000);
-        explode = false;
+        start();
         return;
     }
 
-    if (planted)
+    // --- PLANTING ---
+    if (!planted)
     {
-        _led_bar.turnOn();
-    }
-    
-
-    //PLANTING
-    if (_button.isPressed() && current_plant_time < options.plant_option.get())
-    {
-        if (current_plant_time >= options.plant_option.get())
-        {
-            planted = true;
-        }
-        else
-        {
-            //current_plant_time += 1;
+        if (but.isPressed())
+        {            
             EVERY_MS(100)
             {
                 current_plant_time += 100;
             }
-        }
-    }
-    else if (!_button.isPressed() && current_plant_time < options.plant_option.get())
-    {
-        current_plant_time = 0;
-        planted = false;
-    }
-    else
-    {
-        planted = true;
-    }
 
-    if (!planted)
-    {
+            if (!is_beepd)
+            {
+                _beeper.singleBeep();
+                is_beepd = true;
+            }
+
+            if (current_plant_time >= options.plant_option.get())
+            {
+                planted = true;
+                current_timer = 0;
+                is_beepd = false;
+            }
+        }
+        else
+        {
+            current_plant_time = 0;
+            is_beepd = false;
+        }
+
         _led_display.setNumber((options.plant_option.get() - current_plant_time) / 1000);
         return;
     }
 
-    //TIMER AND EXPLODE
+    // --- TIMER ---
+    _led_bar.turnOn();
+
+    EVERY_MS(100)
+    {
+        current_timer += 100;
+    }
+    
+    if (options.timer_option.get() - current_timer <= 10000)
+    {
+        EVERY_MS(500)
+        {
+            _beeper.singleBeep();
+        }
+    }
+    else
+    {
+        EVERY_MS(1000)
+        {
+            _beeper.singleBeep();
+        }
+    }
+    
+    
+
     _led_display.setNumber((options.timer_option.get() - current_timer) / 1000);
 
     if (current_timer >= options.timer_option.get())
@@ -76,32 +103,39 @@ void Bomb::update()
         return;
     }
 
-    EVERY_MS(100)
+    // --- DEFUSE ---
+    if (but.isPressed())
     {
-        current_timer += 100;
-    }
+        if (!is_beepd)
+        {
+            _beeper.singleBeep();
+            is_beepd = true;
+        }
+        
 
-    //DEFUSING
-    if (current_defusing_time >= options.defuse_option.get())
-    {
-        defused = true;
-    }
-    else
-    {
         EVERY_MS(100)
         {
             current_defusing_time += 100;
         }
+
+        if (current_defusing_time >= options.defuse_option.get())
+        {
+            defused = true;
+            is_beepd = false;
+        }
+    }
+    else
+    {
+        current_defusing_time = 0;
+        is_beepd = false;
     }
     
 }
 
 void Bomb::onPress()
 {
-    
 }
 
 void Bomb::onRelease()
 {
-    
 }

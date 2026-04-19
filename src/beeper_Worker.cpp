@@ -11,10 +11,22 @@ beeper::Worker::Worker()
 void beeper::Worker::changeWorkState(bool state)
 {
     this->state = state;
+    if (!state) {
+        digitalWrite(ESP_EXTERNAL_BEEPER_PIN, LOW);
+        active = false;
+    }
 }
 
 void beeper::Worker::beepSeconds(esp_time_t time)
 {
+    if (time == 0) return;
+
+    if (active)
+    {
+        return;
+    }
+    
+
     m_time = time;
     start_time = millis();
     active = true;
@@ -33,7 +45,7 @@ void beeper::Worker::update()
     if (!active) 
         return;
 
-    if (millis() - start_time >= m_time)
+    if ((millis() - start_time) >= m_time)
     {
         digitalWrite(ESP_EXTERNAL_BEEPER_PIN, LOW);
         state = false;

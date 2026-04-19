@@ -8,6 +8,8 @@ void Lifes::start()
 {
     buton.setOnPress(&Lifes::onPress);
     buton.setOnRelease(&Lifes::onRelease);
+    _button.setOnPress(&Lifes::onPress);
+    _button.setOnRelease(&Lifes::onRelease);
 
     applyToCounter(options.lifes_option.get(), Counter::operators::SET);
 }

@@ -7,6 +7,8 @@
 
 #include "game_modes/bomb/Options.hpp"
 
+#include "externals/button/Worker.hpp"
+
 class Bomb : public GameMode
 {
 public:
@@ -30,6 +32,10 @@ private:
     bool planted = false;
     bool explode = false;
     bool defused = false;
+
+    bool is_beepd = false;
+
+    button::Worker but = button::Worker();
 };
 
 #endif  // BOMB_BOMB_HPP_
