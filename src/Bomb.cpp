@@ -5,10 +5,10 @@
 void Bomb::start()
 {
     _led_display.clear();
-    // _button.setOnPress(&Bomb::onPress);
-    // _button.setOnRelease(&Bomb::onRelease);
-    but.setOnPress(&Bomb::onPress);
-    but.setOnRelease(&Bomb::onRelease);
+    _button.setOnPress(&Bomb::onPress);
+    _button.setOnRelease(&Bomb::onRelease);
+    // but.setOnPress(&Bomb::onPress);
+    // but.setOnRelease(&Bomb::onRelease);
 
     current_plant_time = 0;
     current_timer = 0;
@@ -22,7 +22,7 @@ void Bomb::start()
 
 void Bomb::update()
 {
-    but.update();
+    //but.update();
     if (defused)
     {
         _beeper.beepSeconds(1000);
@@ -40,7 +40,7 @@ void Bomb::update()
     // --- PLANTING ---
     if (!planted)
     {
-        if (but.isPressed())
+        if (_button.isPressed())
         {            
             EVERY_MS(100)
             {
@@ -104,7 +104,7 @@ void Bomb::update()
     }
 
     // --- DEFUSE ---
-    if (but.isPressed())
+    if (_button.isPressed())
     {
         if (!is_beepd)
         {

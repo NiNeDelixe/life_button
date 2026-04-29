@@ -5,7 +5,9 @@
 
 #include "utils/Option.hpp"
 
-struct BombOptions
+#include "game_modes/GameModeOptions.hpp"
+
+struct BombOptions : public GameModeOptions
 {
     TimeOption timer_option = TimeOption(45000);
     TimeOption defuse_option = TimeOption(10000);

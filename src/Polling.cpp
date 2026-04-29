@@ -12,8 +12,8 @@ void Polling::startUp()
     _led_bar.turnOff();
     _led_display.clear();
 
-    temp_lf.start();
-    //mode_manager.crateGameMode(GameModeType::LIFES);
+    //temp_lf.start();
+    mode_manager.crateGameMode(GameModeType::LIFES);
 }
 
 void Polling::poll()
@@ -26,8 +26,8 @@ void Polling::poll()
     _led_strip.update();
     _button.update();
     
-    temp_lf.update();
-    //mode_manager.update();
+    //temp_lf.update();
+    mode_manager.update();
 }
 
 void Polling::delay(esp_time_t time)

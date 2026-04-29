@@ -5,7 +5,9 @@
 
 #include "utils/Option.hpp"
 
-struct LifesOptions
+#include "game_modes/GameModeOptions.hpp"
+
+struct LifesOptions : public GameModeOptions
 {
     TimeOption timer_option;
     IntOption lifes_option = IntOption(70);

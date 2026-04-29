@@ -42,6 +42,6 @@ private:
     bool is_pressed = false;
 };
 
-static button::Worker _button = button::Worker(nullptr, nullptr);
+extern button::Worker _button;
 
 #endif  // BUTTON_WORKER_HPP_

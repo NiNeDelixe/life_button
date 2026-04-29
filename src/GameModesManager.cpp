@@ -7,29 +7,15 @@
 
 GameModesManager::GameModesManager()
 {
-    m_max_active_gamemodes = 4;
-    m_count_active_gamemodes = 0;
-    m_active_gamemodes = new GameMode*[m_max_active_gamemodes]{};
     m_current_gamemode = nullptr;
 }
 
 GameModesManager::~GameModesManager()
 {
-    if (m_active_gamemodes)
-    {
-        for (size_t i = 0; i < m_count_active_gamemodes; i++)
-        {
-            if (m_active_gamemodes[i])
-            {
-                delete m_active_gamemodes[i];
-            }
-        }
-        delete[] m_active_gamemodes;
-    }
-    
     if (m_current_gamemode)
     {
         delete m_current_gamemode;
+        m_current_gamemode = nullptr;
     }
 }
 
@@ -38,62 +24,42 @@ void GameModesManager::crateGameMode(const GameModeType &type)
     if (m_current_gamemode)
     {
         delete m_current_gamemode;
+        m_current_gamemode = nullptr;
     }
-    
-    crateGameMode(m_current_gamemode, type);
-}
 
-void GameModesManager::crateGameMode(GameMode *null_out_gamemode, const GameModeType &type)
-{
-    GameMode * new_gm;
     switch (type)
     {
-    case GameModeType::BOMB :
-        new_gm = new Bomb();
+    case GameModeType::BOMB:
+        m_current_gamemode = new Bomb();
         break;
 
-    case GameModeType::KOTH :
-        //FIXME: Not implemented
-        break;
-    
-    case GameModeType::LIFES :
-        new_gm = new Lifes();
+    case GameModeType::LIFES:
+        m_current_gamemode = new Lifes();
         break;
 
-    case GameModeType::POINT :
-        new_gm = new PointFarming();
+    case GameModeType::POINT:
+        m_current_gamemode = new PointFarming();
+        break;
+
+    case GameModeType::KOTH:
+        // не реализовано
         break;
 
     default:
-        break;
+        return;
     }
 
-    if (new_gm)
+    if (m_current_gamemode)
     {
-        new_gm->start();
-
-        push_back(new_gm);
-
-        null_out_gamemode = new_gm;
+        m_current_gamemode->start();
+        m_current_gametype = type;
     }
 }
 
-void GameModesManager::push_back(GameMode *gamemode)
+void GameModesManager::update()
 {
-    if (m_count_active_gamemodes >= m_max_active_gamemodes)
+    if (m_current_gamemode)
     {
-        size_t new_cap = m_max_active_gamemodes * 2;
-        GameMode** new_arr = new GameMode*[new_cap]{};
-
-        for (size_t i = 0; i < m_count_active_gamemodes; i++)
-        {
-            new_arr[i] = m_active_gamemodes[i];
-        }
-
-        delete[] m_active_gamemodes;
-        m_active_gamemodes = new_arr;
-        m_max_active_gamemodes = new_cap;
+        m_current_gamemode->update();
     }
-
-    m_active_gamemodes[m_count_active_gamemodes++] = gamemode;
 }

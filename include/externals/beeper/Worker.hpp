@@ -39,8 +39,9 @@ private:
     bool active = false;
     esp_time_t m_time = 0;
     uint32_t start_time = 0;
+    uint32_t last_single_beep_request_time = 0;
 };
 
-static beeper::Worker _beeper = beeper::Worker();
+extern beeper::Worker _beeper;
 
 #endif  // BEEPER_WORKER_HPP_

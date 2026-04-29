@@ -33,10 +33,10 @@ private:
 
 
 public:
+    LifesOptions options;
 
 private:
-    static LifesOptions options; //May was nonstatic
-    button::Worker buton = button::Worker(nullptr, nullptr);
+    //button::Worker buton = button::Worker(nullptr, nullptr);
 
     bool is_dead = false;
     bool is_beep = false;

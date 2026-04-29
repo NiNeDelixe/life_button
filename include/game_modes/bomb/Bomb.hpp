@@ -23,8 +23,9 @@ public:
     static void onPress();
     static void onRelease();
 
-private:
     BombOptions options;
+    
+private:
     esp_time_t current_plant_time = 0;
     esp_time_t current_timer = 0;
     esp_time_t current_defusing_time = 0;
@@ -35,7 +36,7 @@ private:
 
     bool is_beepd = false;
 
-    button::Worker but = button::Worker();
+    //button::Worker but = button::Worker();
 };
 
 #endif  // BOMB_BOMB_HPP_

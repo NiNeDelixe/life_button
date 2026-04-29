@@ -49,16 +49,17 @@ void web::WebInterface::onStart()
     server.on("/mode", HTTP_GET, [](AsyncWebServerRequest *request){
         int type = request->getParam("type")->value().toInt();
 
-        GameMode* mode = nullptr;
-        Polling::mode_manager.crateGameMode(mode, (GameModeType)type);
+        // GameMode* mode = nullptr;
+        // Polling::mode_manager.crateGameMode((GameModeType)type);
 
+        // mode = Polling::mode_manager.getCurrentGameMode();
         // json what settings mode has and default number
         String json;
         switch ((GameModeType)type)
         {
         case GameModeType::LIFES :
             json = "{";
-            json += "\"lifes\":3";
+            json += "\"lifes\":100";
             json += "}";
             break;
         case GameModeType::POINT :
@@ -68,8 +69,8 @@ void web::WebInterface::onStart()
         case GameModeType::BOMB :
             json = "{";
             json += "\"timer\":45000,";
-            json += "\"plant\":10000,";
-            json += "\"defuse\":3200";
+            json += "\"defuse\":10000,";
+            json += "\"plant\":3200";
             json += "}";
             break;
         
@@ -116,17 +117,17 @@ void web::WebInterface::onStart()
                 if (request->hasParam("timer")) 
                 {
                     int v = request->getParam("timer")->value().toInt();
-                    bm;
+                    bm->options.timer_option.set(v);
                 }
                 if (request->hasParam("defuse")) 
                 {
                     int v = request->getParam("defuse")->value().toInt();
-                    bm;
+                    bm->options.defuse_option.set(v);
                 }
                 if (request->hasParam("plant")) 
                 {
                     int v = request->getParam("plant")->value().toInt();
-                    bm;
+                    bm->options.plant_option.set(v);
                 }
             }
             break;

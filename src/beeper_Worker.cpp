@@ -2,6 +2,8 @@
 
 #include "core/Polling.hpp"
 
+beeper::Worker _beeper = beeper::Worker();
+
 beeper::Worker::Worker()
 {
     pinMode(ESP_EXTERNAL_BEEPER_PIN, OUTPUT);
@@ -37,6 +39,18 @@ void beeper::Worker::beepSeconds(esp_time_t time)
 
 void beeper::Worker::singleBeep(esp_time_t time)
 {
+    const uint32_t now = millis();
+    if (active)
+    {
+        return;
+    }
+
+    if ((now - last_single_beep_request_time) < time)
+    {
+        return;
+    }
+
+    last_single_beep_request_time = now;
     beepSeconds(time);
 }
 
