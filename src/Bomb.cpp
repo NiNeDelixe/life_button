@@ -22,17 +22,16 @@ void Bomb::start()
 
 void Bomb::update()
 {
-    //but.update();
     if (defused)
     {
-        _beeper.beepSeconds(1000);
+        _beeper.beepSeconds(TIME_S(1));
         start();
         return;
     }
 
     if (explode)
     {
-        _beeper.beepSeconds(10000);
+        _beeper.beepSeconds(TIME_S(10));
         start();
         return;
     }
@@ -66,7 +65,7 @@ void Bomb::update()
             is_beepd = false;
         }
 
-        _led_display.setNumber((options.plant_option.get() - current_plant_time) / 1000);
+        _led_display.setNumber((options.plant_option.get() - current_plant_time) / TIME_S(1));
         return;
     }
 
@@ -78,7 +77,7 @@ void Bomb::update()
         current_timer += 100;
     }
     
-    if (options.timer_option.get() - current_timer <= 10000)
+    if (options.timer_option.get() - current_timer <= options.timer_option.get() / TIME_S(10))
     {
         EVERY_MS(500)
         {
@@ -95,7 +94,7 @@ void Bomb::update()
     
     
 
-    _led_display.setNumber((options.timer_option.get() - current_timer) / 1000);
+    _led_display.setNumber((options.timer_option.get() - current_timer) / TIME_S(1));
 
     if (current_timer >= options.timer_option.get())
     {

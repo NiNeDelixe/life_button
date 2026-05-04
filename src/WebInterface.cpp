@@ -15,7 +15,7 @@ AsyncWebServer server(80);
 void web::WebInterface::onStart()
 {
     //WiFi.disconnect(true);
-    WiFi.mode(WIFI_OFF);
+    WiFi.mode(WIFI_STA);
 
     WiFi.softAP(ssid); // 192.168.4.1
     //WiFi.setTxPower(WIFI_POWER_8_5dBm);
@@ -31,13 +31,13 @@ void web::WebInterface::onStart()
     server.on("/set", HTTP_GET, [](AsyncWebServerRequest *request){
         if (request->hasParam("value")) {
             int v = request->getParam("value")->value().toInt();
-            Polling::temp_lf.applyToCounter(v, Counter::operators::SET);
+            //Polling::temp_lf.applyToCounter(v, Counter::operators::SET);
         }
         request->send(200, "text/plain", "OK");
     });
 
     server.on("/get", HTTP_GET, [](AsyncWebServerRequest *request){
-        int v = Polling::temp_lf.getCount();
+        //int v = Polling::temp_lf.getCount();
         request->send(200, "text/plain", String());
     });
 
@@ -59,7 +59,8 @@ void web::WebInterface::onStart()
         {
         case GameModeType::LIFES :
             json = "{";
-            json += "\"lifes\":100";
+            json += "\"lifes\":70,";
+            json += "\"timer\":4294967294";
             json += "}";
             break;
         case GameModeType::POINT :
@@ -99,8 +100,16 @@ void web::WebInterface::onStart()
                 if (request->hasParam("lifes")) 
                 {
                     int v = request->getParam("lifes")->value().toInt();
-                    lf->applyToCounter(v, Counter::operators::SET);
+                    //lf->applyToCounter(v, Counter::operators::SET);
+                    lf->options.lifes_option.set(v);
                 }
+                if (request->hasParam("timer")) 
+                {
+                    int v = request->getParam("timer")->value().toInt();
+                    //lf->setTimer(v);
+                    lf->options.timer_option.set(v);
+                }
+                lf->start();
             }
             break;
 
@@ -138,6 +147,8 @@ void web::WebInterface::onStart()
         default:
             break;
         }
+
+        Polling::mode_manager.saveCurrent();
 
         request->send(200, "text/plain", "OK");
     });

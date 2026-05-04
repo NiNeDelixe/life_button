@@ -7,9 +7,9 @@
 void setup() 
 {
 	Serial.begin(115200);
-	//Serial.setDebugOutput(true); 
+	Serial.setDebugOutput(true); 
 
-	Serial.print("Programm Statring!");
+	LOG(INFO, "Programm Statring!");
 
 	try
 	{
@@ -17,9 +17,11 @@ void setup()
 	}
 	catch(const std::exception& e)
 	{
-		Serial.print("exception!!!");
-		Serial.print(e.what());
+		LOG(ERROR, "exception!!!");
+		LOG(ERROR, e.what());
 	}
+
+	
 }
 
 void loop() 
@@ -30,7 +32,7 @@ void loop()
 	}
 	catch(const std::exception& e)
 	{
-		Serial.print("exception!!!");
-		Serial.print(e.what());
+		LOG(ERROR, "exception!!!");
+		LOG(ERROR, e.what());
 	}
 }

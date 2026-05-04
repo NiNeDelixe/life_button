@@ -20,4 +20,12 @@ constexpr size_t ESP_EXTERNAL_LED_STRIP_COUNT = 18;
 
 constexpr pin_t ESP_EXTERNAL_LED_BAR_PIN = 4;
 
+constexpr pin_t ESP_EXTERNAL_RFID_RST_PIN = 8;
+constexpr pin_t ESP_EXTERNAL_RFID_SS_PIN = 200; //
+
+constexpr pin_t ESP_EXTERNAL_RFID_SPI_SCK_PIN = 4;
+constexpr pin_t ESP_EXTERNAL_RFID_SPI_MISO_PIN = 5;
+constexpr pin_t ESP_EXTERNAL_RFID_SPI_MOSI_PIN = 6;
+
+
 #endif  // CORE_CONSTANTS_HPP_

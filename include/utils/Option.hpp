@@ -43,5 +43,39 @@ private:
     
 };
 
+class FlagOption : public IOption<bool>
+{
+public:
+    FlagOption() = default;
+    FlagOption(bool value) { this->value = value; }
+    ~FlagOption() = default;
+
+private:
+    
+};
+
+template<class TYPE>
+class ArrayOption : public IOption<TYPE*>
+{
+public:
+    ArrayOption() = default;
+    ArrayOption(TYPE* value) { this->value = value; }
+    ~ArrayOption() = default;
+
+private:
+    
+};
+
+// template<class TYPE>
+// class VectorOption : public IOption<std::vector<TYPE>>
+// {
+// public:
+//     ArrayOption() = default;
+//     ArrayOption(std::vector<TYPE> value) { this->value = value; }
+//     ~ArrayOption() = default;
+
+// private:
+    
+// };
 
 #endif  // UTILS_OPTION_HPP_

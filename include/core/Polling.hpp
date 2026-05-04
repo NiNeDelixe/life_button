@@ -16,6 +16,8 @@
 #include "externals/led_strip/Worker.hpp"
 #include "externals/led_display/Worker.hpp"
 
+#include "logic/saving/Saveing.hpp"
+
 #include "web/WebInterface.hpp"
 
 
@@ -32,7 +34,6 @@ public:
     static void delay(esp_time_t time);
 
 public:
-    static Lifes temp_lf;
     static GameModesManager mode_manager;
 };
 

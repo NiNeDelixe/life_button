@@ -1,7 +1,6 @@
 #include "core/Polling.hpp"
 
 GameModesManager Polling::mode_manager = {};
-Lifes Polling::temp_lf = {};
 
 void Polling::startUp()
 {
@@ -12,8 +11,7 @@ void Polling::startUp()
     _led_bar.turnOff();
     _led_display.clear();
 
-    //temp_lf.start();
-    mode_manager.crateGameMode(GameModeType::LIFES);
+    //mode_manager.crateGameMode(GameModeType::LIFES);
 }
 
 void Polling::poll()
@@ -26,7 +24,6 @@ void Polling::poll()
     _led_strip.update();
     _button.update();
     
-    //temp_lf.update();
     mode_manager.update();
 }
 

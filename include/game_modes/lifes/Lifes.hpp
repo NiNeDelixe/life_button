@@ -5,6 +5,7 @@
 
 #include "game_modes/GameMode.hpp"
 #include "game_modes/HasCounter.hpp"
+#include "game_modes/HasTimer.hpp"
 
 #include "logic/counter/Counter.hpp"
 
@@ -17,7 +18,7 @@
 
 
 
-class Lifes : public GameMode, public HasCounter
+class Lifes : public GameMode, public HasCounter, public HasTimer
 {
 public:
     Lifes() = default;
@@ -31,13 +32,13 @@ private:
     static void onPress();
     static void onRelease();
 
+public:
+    GameModeOptions* getOptions() override { return &options; };
 
 public:
     LifesOptions options;
 
 private:
-    //button::Worker buton = button::Worker(nullptr, nullptr);
-
     bool is_dead = false;
     bool is_beep = false;
 };

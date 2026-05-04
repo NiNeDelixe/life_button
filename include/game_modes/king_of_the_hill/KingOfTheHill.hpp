@@ -3,11 +3,16 @@
 
 #include "core/core.hpp"
 
-class KingOfTheHill
+#include "game_modes/GameMode.hpp"
+
+class KingOfTheHill : public GameMode
 {
 public:
     KingOfTheHill() = default;
     ~KingOfTheHill() = default;
+
+    void start();
+    void update();
 
 private:
     

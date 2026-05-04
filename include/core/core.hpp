@@ -19,14 +19,30 @@ using esp_millis_t = uint32_t;
 #define WARN warning
 #define ERROR error
 #define INFO info
-#define DEBUG debug
+//#define DEBUG debug
 
-#define T(...) #__VA_ARGS__
+#define STR(x) #x
+#define XSTR(x) STR(x)
 
-#define LOG(severinity, message) Serial.println(T([severinity]: message));
+#define LOG(severity, message)        \
+    do {                             \
+        Serial.print("[");           \
+        Serial.print(#severity);     \
+        Serial.print("]: ");         \
+        Serial.println(message);     \
+    } while(0)
 
 #define DIGITAL_OUTPUT HIGH
 
-#define BEEPER_DIGITAL_OUTPUT DIGITAL_OUTPUT
+#ifdef DEBUG
+#define BEEPER_DIGITAL_OUTPUT LOW
+#else
+#define BEEPER_DIGITAL_OUTPUT HIGH
+#endif
+
+#define TIME_NS(time) (time)
+#define TIME_MS(time) (TIME_NS(time) * 10)
+#define TIME_S(time) (TIME_MS(time) * 100)
+#define TIME_M(time) (TIME_S(time)  * 60)
 
 #endif  // INCLUDE_CORE_HPP_

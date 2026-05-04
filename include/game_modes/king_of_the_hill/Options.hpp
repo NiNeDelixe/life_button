@@ -5,7 +5,19 @@
 
 struct KOTHOptions : public GameModeOptions
 {
-    
+
+
+    void save(Preferences& prefs) const override
+    {
+        // prefs.putInt("koth_lifes", lifes_option.get());
+        // prefs.putInt("koth_timer", timer_option.get());
+    }
+
+    void load(Preferences& prefs) override
+    {
+        // lifes_option = prefs.getInt("koth_lifes", 70);
+        // timer_option = prefs.getInt("koth_timer", 0);
+    }
 };
 
 

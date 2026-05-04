@@ -5,7 +5,9 @@
 
 #include "utils/Option.hpp"
 
-class GameModeOptions
+#include "logic/saving/ISaveble.hpp"
+
+class GameModeOptions : public ISaveble
 {
 public:
     GameModeOptions() = default;

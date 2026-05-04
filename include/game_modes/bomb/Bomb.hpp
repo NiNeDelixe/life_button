@@ -23,6 +23,9 @@ public:
     static void onPress();
     static void onRelease();
 
+public:
+    GameModeOptions* getOptions() override { return &options; };
+
     BombOptions options;
     
 private:

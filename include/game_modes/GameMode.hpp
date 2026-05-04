@@ -3,6 +3,8 @@
 
 #include "core/core.hpp"
 
+#include "game_modes/GameModeOptions.hpp"
+
 enum class GameModeType : uint8_t
 {
     BOMB,
@@ -20,6 +22,7 @@ public:
 public:
     virtual void start() = 0;
     virtual void update() = 0;
+    virtual GameModeOptions* getOptions() { return nullptr; };
 
 private:
     

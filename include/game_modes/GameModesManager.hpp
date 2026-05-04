@@ -4,7 +4,9 @@
 #include "core/core.hpp"
 #include "game_modes/GameMode.hpp"
 
-class GameModesManager
+#include "logic/saving/Saveing.hpp"
+
+class GameModesManager : public SaveManager
 {
 public:
     GameModesManager();
@@ -15,6 +17,10 @@ public:
 
     void setGameMode(GameMode* gamemode) { m_current_gamemode = gamemode; }
     GameMode* getCurrentGameMode() { return m_current_gamemode; }
+
+    void saveCurrent();
+
+    void loadCurrent();
 
     void update();
 
