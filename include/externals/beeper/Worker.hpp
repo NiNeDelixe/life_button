@@ -19,8 +19,12 @@ using volume_t = int;
 
 class beeper::Worker : public IWorker
 {
-public:
+    DECLARE_CLASS(Worker)
+
+private:
     Worker();
+
+public:
     ~Worker() = default;
 
 public:
@@ -41,7 +45,5 @@ private:
     uint32_t start_time = 0;
     uint32_t last_single_beep_request_time = 0;
 };
-
-extern beeper::Worker _beeper;
 
 #endif  // BEEPER_WORKER_HPP_

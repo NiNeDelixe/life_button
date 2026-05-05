@@ -4,11 +4,9 @@
 
 void Bomb::start()
 {
-    _led_display.clear();
-    _button.setOnPress(&Bomb::onPress);
-    _button.setOnRelease(&Bomb::onRelease);
-    // but.setOnPress(&Bomb::onPress);
-    // but.setOnRelease(&Bomb::onRelease);
+    led_display::Worker::getInstance().clear();
+    button::Worker::getInstance().setOnPress(&Bomb::onPress);
+    button::Worker::getInstance().setOnRelease(&Bomb::onRelease);
 
     current_plant_time = 0;
     current_timer = 0;
@@ -24,14 +22,14 @@ void Bomb::update()
 {
     if (defused)
     {
-        _beeper.beepSeconds(TIME_S(1));
+        beeper::Worker::getInstance().beepSeconds(TIME_S(1));
         start();
         return;
     }
 
     if (explode)
     {
-        _beeper.beepSeconds(TIME_S(10));
+        beeper::Worker::getInstance().beepSeconds(TIME_S(10));
         start();
         return;
     }
@@ -39,7 +37,7 @@ void Bomb::update()
     // --- PLANTING ---
     if (!planted)
     {
-        if (_button.isPressed())
+        if (button::Worker::getInstance().isPressed())
         {            
             EVERY_MS(100)
             {
@@ -48,7 +46,7 @@ void Bomb::update()
 
             if (!is_beepd)
             {
-                _beeper.singleBeep();
+                beeper::Worker::getInstance().singleBeep();
                 is_beepd = true;
             }
 
@@ -65,12 +63,12 @@ void Bomb::update()
             is_beepd = false;
         }
 
-        _led_display.setNumber((options.plant_option.get() - current_plant_time) / TIME_S(1));
+        led_display::Worker::getInstance().setNumber((options.plant_option.get() - current_plant_time) / TIME_S(1));
         return;
     }
 
     // --- TIMER ---
-    _led_bar.turnOn();
+    led_bar::Worker::getInstance().turnOn();
 
     EVERY_MS(100)
     {
@@ -81,20 +79,20 @@ void Bomb::update()
     {
         EVERY_MS(500)
         {
-            _beeper.singleBeep();
+            beeper::Worker::getInstance().singleBeep();
         }
     }
     else
     {
         EVERY_MS(1000)
         {
-            _beeper.singleBeep();
+            beeper::Worker::getInstance().singleBeep();
         }
     }
     
     
 
-    _led_display.setNumber((options.timer_option.get() - current_timer) / TIME_S(1));
+    led_display::Worker::getInstance().setNumber((options.timer_option.get() - current_timer) / TIME_S(1));
 
     if (current_timer >= options.timer_option.get())
     {
@@ -103,11 +101,11 @@ void Bomb::update()
     }
 
     // --- DEFUSE ---
-    if (_button.isPressed())
+    if (button::Worker::getInstance().isPressed())
     {
         if (!is_beepd)
         {
-            _beeper.singleBeep();
+            beeper::Worker::getInstance().singleBeep();
             is_beepd = true;
         }
         

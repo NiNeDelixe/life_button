@@ -16,6 +16,8 @@
 using esp_time_t = uint32_t;
 using esp_millis_t = uint32_t;
 
+constexpr esp_time_t esp_time_t_max_value = 4294967295;
+
 #define WARN warning
 #define ERROR error
 #define INFO info
@@ -44,5 +46,15 @@ using esp_millis_t = uint32_t;
 #define TIME_MS(time) (TIME_NS(time) * 10)
 #define TIME_S(time) (TIME_MS(time) * 100)
 #define TIME_M(time) (TIME_S(time)  * 60)
+
+#define DELETE_COPY(Class) \
+Class(const Class&) = delete; \
+void operator=(const Class&) = delete;
+
+#define DECLARE_CLASS(Class) \
+public: \
+DELETE_COPY(Class) \
+static Class& getInstance() { static Class instance; return instance; } \
+private: \
 
 #endif  // INCLUDE_CORE_HPP_

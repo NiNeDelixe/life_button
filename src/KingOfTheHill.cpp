@@ -4,11 +4,11 @@
 
 void KingOfTheHill::start()
 {
-    _button.setOnPress(nullptr);
-    _button.setOnRelease(nullptr);
+    button::Worker::getInstance().setOnPress(nullptr);
+    button::Worker::getInstance().setOnRelease(nullptr);
 
-    _led_strip.changeColor(255, 255, 255);
-    _led_bar.turnOn();
+    led_strip::Worker::getInstance().changeColor(255, 255, 255); //white
+    led_bar::Worker::getInstance().turnOn();
 }
 
 void KingOfTheHill::update()

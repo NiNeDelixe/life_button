@@ -2,8 +2,6 @@
 
 #include "core/Polling.hpp"
 
-beeper::Worker _beeper = beeper::Worker();
-
 beeper::Worker::Worker()
 {
     pinMode(ESP_EXTERNAL_BEEPER_PIN, OUTPUT);

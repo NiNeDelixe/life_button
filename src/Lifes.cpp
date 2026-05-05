@@ -4,8 +4,8 @@
 
 void Lifes::start()
 {
-    _button.setOnPress(&Lifes::onPress);
-    _button.setOnRelease(&Lifes::onRelease);
+    button::Worker::getInstance().setOnPress(&Lifes::onPress);
+    button::Worker::getInstance().setOnRelease(&Lifes::onRelease);
 
     applyToCounter(options.lifes_option.get(), Counter::operators::SET);
 
@@ -19,9 +19,9 @@ void Lifes::update()
 {
     updateTimer();
     
-    _led_display.setNumber(m_counter.count);
+    led_display::Worker::getInstance().setNumber(m_counter.count);
 
-    if (_button.isPressed())
+    if (button::Worker::getInstance().isPressed())
     {
         startTimer();
     }
@@ -39,8 +39,8 @@ void Lifes::update()
 
     if (is_dead && !is_beep)
     {
-        _button_led.setState(true);
-        _beeper.beepSeconds(TIME_S(10));
+        button::led::Worker::getInstance().setState(true);
+        beeper::Worker::getInstance().beepSeconds(TIME_S(10));
         is_beep = true;
         is_dead = false;
     }

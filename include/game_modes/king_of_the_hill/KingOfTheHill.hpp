@@ -5,6 +5,8 @@
 
 #include "game_modes/GameMode.hpp"
 
+#include "game_modes/king_of_the_hill/Options.hpp"
+
 class KingOfTheHill : public GameMode
 {
 public:
@@ -13,6 +15,12 @@ public:
 
     void start();
     void update();
+
+public:
+    GameModeOptions* getOptions() override { return &options; };
+
+public:
+    KOTHOptions options;
 
 private:
     

@@ -38,8 +38,6 @@ private:
     bool defused = false;
 
     bool is_beepd = false;
-
-    //button::Worker but = button::Worker();
 };
 
 #endif  // BOMB_BOMB_HPP_

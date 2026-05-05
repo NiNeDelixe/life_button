@@ -15,8 +15,12 @@ namespace web
 
 class web::WebInterface
 {
-public:
+    DECLARE_CLASS(WebInterface)
+
+private:
     WebInterface() = default;
+
+public:
     ~WebInterface() = default;
 
     void onStart();
@@ -26,7 +30,5 @@ private:
     const char* ssid = "ESP32";
     const char* password = "12345678";
 };
-
-static web::WebInterface _interface = web::WebInterface();
 
 #endif  // WEB_WEBINTERFACE_HPP_

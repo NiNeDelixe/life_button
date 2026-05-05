@@ -2,8 +2,6 @@
 
 #include "core/Polling.hpp"
 
-rfid::Worker _rfid_reader = {};
-
 rfid::Worker::Worker()
 {
     //SPI.begin(ESP_EXTERNAL_RFID_SPI_SCK_PIN, ESP_EXTERNAL_RFID_SPI_MISO_PIN, ESP_EXTERNAL_RFID_SPI_MOSI_PIN, ESP_EXTERNAL_RFID_SS_PIN);
@@ -30,7 +28,7 @@ void rfid::Worker::update()
 
     tag_detected = true;
 
-    _led_circuit.singleRun();
+    led_circuit::Worker::getInstance().singleRun();
 }
 
 bool rfid::Worker::tagDetected()

@@ -12,8 +12,12 @@ namespace led_bar
 
 class led_bar::Worker : public IWorker
 {
-public:
+    DECLARE_CLASS(Worker)
+
+private:
     Worker();
+
+public:
     ~Worker() = default;
 
 public:
@@ -28,7 +32,5 @@ public:
 private:
     bool state;
 };
-
-static led_bar::Worker _led_bar = led_bar::Worker();
 
 #endif  // LED_BAR_WORKER_HPP_

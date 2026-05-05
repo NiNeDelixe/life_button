@@ -15,8 +15,12 @@ namespace rfid
 
 class rfid::Worker : public IWorker
 {
-public:
+    DECLARE_CLASS(Worker)
+
+private:
     Worker();
+
+public:
     ~Worker() = default;
 
 public:
@@ -33,7 +37,5 @@ private:
 
     bool tag_detected = false;
 };
-
-extern rfid::Worker _rfid_reader;
 
 #endif  // RFID_WORKER_HPP_

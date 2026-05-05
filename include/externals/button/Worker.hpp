@@ -21,9 +21,13 @@ namespace button
 
 class button::Worker : public IWorker
 {
+    DECLARE_CLASS(Worker)
+
+private:
+    Worker();
+
 public:
     Worker(callback_t on_press, callback_t on_release);
-    Worker();
     ~Worker() = default;
 
 public:
@@ -41,7 +45,5 @@ private:
     bool last_state;
     bool is_pressed = false;
 };
-
-extern button::Worker _button;
 
 #endif  // BUTTON_WORKER_HPP_

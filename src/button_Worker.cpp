@@ -1,7 +1,5 @@
 #include "externals/button/Worker.hpp"
 
-button::Worker _button = {};
-
 button::Worker::Worker(callback_t on_press, callback_t on_release)
     : on_press(on_press), on_release(on_release)
 {

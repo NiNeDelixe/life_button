@@ -14,8 +14,12 @@ namespace led_display
 
 class led_display::Worker
 {
-public:
+    DECLARE_CLASS(Worker)
+
+private:
     Worker();
+
+public:
     ~Worker() = default;
 
 public:
@@ -28,7 +32,5 @@ private:
 
     uint8_t blank[4] = { 0x00, 0x00, 0x00, 0x00 };
 };
-
-static led_display::Worker _led_display = {};
 
 #endif  // LED_DISPLAY_WORKER_HPP_

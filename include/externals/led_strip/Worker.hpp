@@ -59,8 +59,12 @@ static led_strip::Behavior _first_example = {};
 
 class led_strip::Worker : public IWorker
 {
-public:
+    DECLARE_CLASS(Worker)
+
+private:
     Worker();
+
+public:
     ~Worker() = default;
 
 public:
@@ -80,7 +84,5 @@ public:
 private:
     //CRGB leds[ESP_EXTERNAL_LED_STRIP_COUNT];
 };
-
-static led_strip::Worker _led_strip = {};
 
 #endif  // LED_STRIP_WORKER_HPP_

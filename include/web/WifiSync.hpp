@@ -38,6 +38,8 @@ private:
 
     Data m_data;
 
+    bool is_transmitter = true;
+
 public:
     static WifiSync* instance;
 };

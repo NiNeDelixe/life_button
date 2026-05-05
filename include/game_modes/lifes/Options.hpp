@@ -11,7 +11,7 @@
 
 struct LifesOptions : public GameModeOptions
 {
-    TimeOption timer_option = TimeOption(4294967294);
+    TimeOption timer_option = TimeOption(esp_time_t_max_value);
     IntOption lifes_option = IntOption(70);
 
     void save(Preferences& prefs) const override
@@ -23,7 +23,7 @@ struct LifesOptions : public GameModeOptions
     void load(Preferences& prefs) override
     {
         lifes_option = prefs.getInt("lf_lifes", 70);
-        timer_option = prefs.getInt("lf_timer", 4294967294);
+        timer_option = prefs.getInt("lf_timer", esp_time_t_max_value);
     }
 };
 

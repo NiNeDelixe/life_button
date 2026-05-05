@@ -4,25 +4,25 @@ GameModesManager Polling::mode_manager = {};
 
 void Polling::startUp()
 {
-    _led_bar.turnOn();
-    _beeper.singleBeep();
-    _led_circuit.singleRun();
-    _interface.onStart();
-    _led_bar.turnOff();
-    _led_display.clear();
+    led_bar::Worker::getInstance().turnOn();
+    beeper::Worker::getInstance().singleBeep();
+    led_circuit::Worker::getInstance().singleRun();
+    web::WebInterface::getInstance().onStart();
+    led_bar::Worker::getInstance().turnOff();
+    led_display::Worker::getInstance().clear();
 
     //mode_manager.crateGameMode(GameModeType::LIFES);
 }
 
 void Polling::poll()
 {
-    _interface.update();
-    _led_circuit.update();
-    _button_led.update();
-    _beeper.update();
-    _led_bar.update();
-    _led_strip.update();
-    _button.update();
+    web::WebInterface::getInstance().update();
+    led_circuit::Worker::getInstance().update();
+    button::led::Worker::getInstance().update();
+    beeper::Worker::getInstance().update();
+    led_bar::Worker::getInstance().update();
+    led_strip::Worker::getInstance().update();
+    button::Worker::getInstance().update();
     
     mode_manager.update();
 }

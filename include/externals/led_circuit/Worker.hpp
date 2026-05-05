@@ -14,8 +14,12 @@ namespace led_circuit
 
 class led_circuit::Worker : public IWorker
 {
-public:
+    DECLARE_CLASS(Worker)
+
+private:
     Worker();
+
+public:
     ~Worker() = default;
 
 public:
@@ -31,7 +35,5 @@ private:
     esp_time_t start_time;
     bool active;
 };
-
-static led_circuit::Worker _led_circuit = led_circuit::Worker();
 
 #endif  // LED_CIRCUIT_WORKER_HPP_

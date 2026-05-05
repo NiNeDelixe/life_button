@@ -4,15 +4,15 @@
 
 void PointFarming::start()
 {
-    _led_display.clear();
-    _led_display.setNumber(0);
-    _button.setOnPress(&PointFarming::onPress);
-    _button.setOnRelease(&PointFarming::onRelease);
+    led_display::Worker::getInstance().clear();
+    led_display::Worker::getInstance().setNumber(0);
+    button::Worker::getInstance().setOnPress(&PointFarming::onPress);
+    button::Worker::getInstance().setOnRelease(&PointFarming::onRelease);
 }
 
 void PointFarming::update()
 {
-    _led_display.setNumber(m_counter.count);
+    led_display::Worker::getInstance().setNumber(m_counter.count);
 }
 
 void PointFarming::onPress()

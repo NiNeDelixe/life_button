@@ -14,6 +14,7 @@ web::WifiSync::WifiSync()
 void web::WifiSync::onStart()
 {
     //Transmeter
+    if (is_transmitter)
     {
         WiFi.mode(WIFI_STA);
         esp_now_init();
@@ -24,6 +25,7 @@ void web::WifiSync::onStart()
     }
 
     //Reciver
+    if (!is_transmitter)
     {
         WiFi.mode(WIFI_STA);
         esp_now_init();
@@ -33,6 +35,11 @@ void web::WifiSync::onStart()
 
 void web::WifiSync::update()
 {
+    if (!is_transmitter)
+    {
+        return;
+    }
+    
     m_data.value = 123;
     esp_now_send(receiverMac, (uint8_t*)&m_data, sizeof(m_data));
 }

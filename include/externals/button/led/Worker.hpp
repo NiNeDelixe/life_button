@@ -15,8 +15,12 @@ namespace led
 
 class button::led::Worker : public IWorker
 {
-public:
+    DECLARE_CLASS(Worker)
+
+private:
     Worker();
+
+public:
     ~Worker() = default;
 
 public:
@@ -29,7 +33,5 @@ public:
 private:
     bool state = false;
 };
-
-static button::led::Worker _button_led = button::led::Worker();
 
 #endif  // LED_WORKER_HPP_

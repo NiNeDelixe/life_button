@@ -3,6 +3,8 @@
 
 #include "core/core.hpp"
 
+#include <initializer_list>
+
 template <typename T>
 class IOption
 {
@@ -58,12 +60,100 @@ template<class TYPE>
 class ArrayOption : public IOption<TYPE*>
 {
 public:
-    ArrayOption() = default;
-    ArrayOption(TYPE* value) { this->value = value; }
-    ~ArrayOption() = default;
+    ArrayOption() : size(0) {}
+
+    ArrayOption(std::initializer_list<TYPE> list)
+    {
+        size = list.size();
+        this->value = new TYPE[size];
+
+        size_t i = 0;
+        for (const auto& v : list)
+            this->value[i++] = v;
+    }
+
+    ArrayOption(const ArrayOption& other)
+    {
+        size = other.size;
+        this->value = new TYPE[size];
+        for (size_t i = 0; i < size; ++i)
+            this->value[i] = other.value[i];
+    }
+
+    ArrayOption& operator=(const ArrayOption& other)
+    {
+        if (this == &other) return *this;
+
+        delete[] this->value;
+
+        size = other.size;
+        this->value = new TYPE[size];
+        for (size_t i = 0; i < size; ++i)
+            this->value[i] = other.value[i];
+
+        return *this;
+    }
+
+    ~ArrayOption()
+    {
+        delete[] this->value;
+    }
+
+public:
+    //const TYPE*& get() const override { return *this->value; }
+    TYPE* getArray() const { return this->value; }
+    size_t getSize() const { return size; }
 
 private:
-    
+    size_t size = 0;
+};
+
+template<class TYPE, int n>
+class StaticArrayOption : public IOption<std::array<TYPE, n>>
+{
+public:
+    StaticArrayOption()
+    {
+        this->value = {TYPE{}, TYPE{}, TYPE{}};
+    }
+
+    StaticArrayOption(const std::array<TYPE, n>& value)
+    {
+        this->value = value;
+    }
+
+    StaticArrayOption(TYPE v1, TYPE v2, TYPE v3)
+    {
+        this->value = {v1, v2, v3};
+    }
+
+    StaticArrayOption(std::initializer_list<TYPE> list)
+    {
+        size_t i = 0;
+        for (auto& v : list)
+        {
+            if (i >= 3) break;
+            this->value[i++] = v;
+        }
+        for (; i < 3; ++i)
+            this->value[i] = TYPE{};
+    }
+
+    ~StaticArrayOption() = default;
+
+public:
+    const std::array<TYPE, n>& get() const override
+    {
+        return this->value;
+    }
+
+    void set(const std::array<TYPE, n>& new_value) override
+    {
+        this->value = new_value;
+    }
+
+    TYPE& operator[](size_t index) { return this->value[index]; }
+    const TYPE& operator[](size_t index) const { return this->value[index]; }
 };
 
 // template<class TYPE>
