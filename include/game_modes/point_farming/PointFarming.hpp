@@ -7,8 +7,11 @@
 #include "game_modes/GameMode.hpp"
 
 #include "game_modes/HasCounter.hpp"
+#include "game_modes/HasTimer.hpp"
 
-class PointFarming : public GameMode, public HasCounter
+#include "game_modes/point_farming/Options.hpp"
+
+class PointFarming : public GameMode, public HasCounter, public HasTimer
 {
 public:
     PointFarming() = default;
@@ -20,6 +23,12 @@ public:
 
     static void onPress();
     static void onRelease();
+
+public:
+    GameModeOptions* getOptions() { return &options; };
+
+public:
+    PointFarmingOptions options;
 
 private:
 };

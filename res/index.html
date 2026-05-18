@@ -22,6 +22,7 @@
     <div id="settings"></div>
 
     <button onclick="save()">Сохранить</button>
+    <button onclick="restart()">Рестарт</button>
 </div>
 
 <script>
@@ -44,6 +45,10 @@
 
                 document.getElementById("settings").innerHTML = html;
             });
+    }
+
+    function restart() {
+        fetch("/restart");
     }
 
     function save() {

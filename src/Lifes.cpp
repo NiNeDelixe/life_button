@@ -11,6 +11,7 @@ void Lifes::start()
 
     is_dead = false;
     is_beep = false;
+    is_time_end = false;
 
     setTimer(options.timer_option.get());
 }
@@ -19,7 +20,10 @@ void Lifes::update()
 {
     updateTimer();
     
-    led_display::Worker::getInstance().setNumber(m_counter.count);
+    if (!is_time_end)
+    {
+        led_display::Worker::getInstance().setNumber(getCount());
+    }
 
     if (button::Worker::getInstance().isPressed())
     {
@@ -28,13 +32,12 @@ void Lifes::update()
 
     if (isTimerFinished())
     {
-        is_dead = true;
+        is_time_end = true;
     }
 
-    if (m_counter.count <= 0)
+    if (getCount() <= 0)
     {
         is_dead = true;
-        is_beep = false;
     }
 
     if (is_dead && !is_beep)
@@ -43,7 +46,22 @@ void Lifes::update()
         beeper::Worker::getInstance().beepSeconds(TIME_S(10));
         is_beep = true;
         is_dead = false;
+        is_time_end = false;
     }
+
+    if (is_dead)
+    {
+        EVERY_S(1)
+        {
+            led_display::Worker::getInstance().setText("Life");
+        }
+    }
+
+    if (is_time_end)
+    {
+        led_display::Worker::getInstance().setText("End ");
+    }
+    
 }
 
 void Lifes::onPress()

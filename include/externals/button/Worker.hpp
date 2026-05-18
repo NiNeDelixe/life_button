@@ -35,6 +35,7 @@ public:
     void setOnRelease(callback_t callback) { on_release = callback; }
 
     bool isPressed() const { return is_pressed; }
+    bool isReleased() const { return is_released; }
 
 public:
     void update() override;
@@ -44,6 +45,7 @@ private:
     callback_t on_release;
     bool last_state;
     bool is_pressed = false;
+    bool is_released = false;
 };
 
 #endif  // BUTTON_WORKER_HPP_

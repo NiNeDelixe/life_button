@@ -14,6 +14,13 @@ struct KOTHOptions : public GameModeOptions
     IntOption points_to_win = { 10000 };
     IntOption points_multiplier = { 5 };
 
+    FlagOption is_need_to_hold_button = { false };
+
+    //Option in develop
+    //points add passive for teams who dont conquest flag
+    FlagOption is_flag_rot; 
+
+
     void save(Preferences& prefs) const override
     {
         // prefs.putInt("koth_lifes", lifes_option.get());

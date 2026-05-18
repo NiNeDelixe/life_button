@@ -23,6 +23,7 @@ protected:
         if (m_started || m_duration == 0)
             return;
 
+        LOG(INFO, "Timer has started");
         m_start_time = millis();
         m_started = true;
     }
@@ -34,6 +35,7 @@ protected:
 
         if (millis() - m_start_time >= m_duration)
         {
+            LOG(INFO, "Timer is finished");
             m_finished = true;
         }
     }
@@ -42,6 +44,8 @@ protected:
     {
         return m_finished;
     }
+
+    uint32_t getTime() { return m_duration; }
 
 private:
     uint32_t m_start_time = 0;

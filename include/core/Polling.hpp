@@ -15,10 +15,12 @@
 #include "externals/led_bar/Worker.hpp"
 #include "externals/led_strip/Worker.hpp"
 #include "externals/led_display/Worker.hpp"
+#include "externals/rfid/Worker.hpp"
 
 #include "logic/saving/Saveing.hpp"
 
 #include "web/WebInterface.hpp"
+#include "web/BoardsSync.hpp"
 
 
 class Polling

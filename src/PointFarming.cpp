@@ -5,19 +5,27 @@
 void PointFarming::start()
 {
     led_display::Worker::getInstance().clear();
-    led_display::Worker::getInstance().setNumber(0);
+    led_display::Worker::getInstance().setNumber(options.start_value.get());
     button::Worker::getInstance().setOnPress(&PointFarming::onPress);
     button::Worker::getInstance().setOnRelease(&PointFarming::onRelease);
+
+    setTimer(options.timer.get());
 }
 
 void PointFarming::update()
 {
-    led_display::Worker::getInstance().setNumber(m_counter.count);
+    led_display::Worker::getInstance().setNumber(getCount());
+
+    if (button::Worker::getInstance().isPressed())
+    {
+        startTimer();
+        applyToCounter(options.operation_value.get(), Counter::operators::ADD);
+    }
+    
 }
 
 void PointFarming::onPress()
 {
-    applyToCounter(1, Counter::operators::ADD);
 }
 
 void PointFarming::onRelease()

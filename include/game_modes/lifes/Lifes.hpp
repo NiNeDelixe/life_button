@@ -41,6 +41,7 @@ public:
 private:
     bool is_dead = false;
     bool is_beep = false;
+    bool is_time_end = false;
 };
 
 #endif  // LIFES_LIFES_HPP_

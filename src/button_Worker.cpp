@@ -24,6 +24,7 @@ void button::Worker::update()
             {
                 Serial.print("button pressed");
                 is_pressed = true;
+                is_released = false;
                 on_press();
             }
         } 
@@ -33,6 +34,7 @@ void button::Worker::update()
             {
                 Serial.print("button release");
                 is_pressed = false;
+                is_released = true;
                 on_release();
             }
         }

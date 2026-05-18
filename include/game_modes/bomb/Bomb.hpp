@@ -19,6 +19,11 @@ public:
     void start() override;
     void update() override;
 
+    void updatePlant();
+    void updateDefuse();
+    void updateTimer();
+    void updateEnd();
+
 public:
     static void onPress();
     static void onRelease();

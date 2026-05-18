@@ -46,13 +46,29 @@ void web::WebInterface::onStart()
         request->send(404, "text/plain", "Not found");
     });
 
+    server.on("/getCurrentMode", HTTP_GET, [](AsyncWebServerRequest *request) {
+        GameModeType curr_type = Polling::mode_manager.getCurrentGameType();
+        
+        uint8_t t = (uint8_t)curr_type;
+
+        char* buff;
+        sprintf(buff, "%d", t);
+        
+        request->send(200, "text/plain", buff);
+    });
+
+    server.on("/restart", HTTP_GET, [](AsyncWebServerRequest *request) {
+        Polling::mode_manager.getCurrentGameMode()->start();
+        
+        request->send(200, "text/plain", "OK");
+    });
+
     server.on("/mode", HTTP_GET, [](AsyncWebServerRequest *request){
         int type = request->getParam("type")->value().toInt();
 
         // GameMode* mode = nullptr;
         // Polling::mode_manager.crateGameMode((GameModeType)type);
 
-        // mode = Polling::mode_manager.getCurrentGameMode();
         // json what settings mode has and default number
         String json;
         switch ((GameModeType)type)
@@ -64,7 +80,12 @@ void web::WebInterface::onStart()
             json += "}";
             break;
         case GameModeType::POINT :
-            json = "{}";
+            json = "{";
+            json += "\"timer\":4294967294,";
+            json += "\"operation_value\":1,";
+            json += "\"start_value\":0,";
+            json += "\"operation_type\":[0,1,2]";
+            json += "}";
             break;
         
         case GameModeType::BOMB :
@@ -116,7 +137,26 @@ void web::WebInterface::onStart()
         case GameModeType::POINT :
             {
                 PointFarming* po = (PointFarming*)Polling::mode_manager.getCurrentGameMode();
-                po->applyToCounter(0, Counter::operators::SET);
+                if (request->hasParam("timer")) 
+                {
+                    int v = request->getParam("timer")->value().toInt();
+                    po->options.timer.set(v);
+                }
+                if (request->hasParam("operation_value")) 
+                {
+                    int v = request->getParam("operation_value")->value().toInt();
+                    po->options.operation_value.set(v);
+                }
+                if (request->hasParam("start_value")) 
+                {
+                    int v = request->getParam("start_value")->value().toInt();
+                    po->options.start_value.set(v);
+                }
+                if (request->hasParam("operation_type")) 
+                {
+                    //int v = request->getParam("operation_type")->value().toInt();
+                    //po->options.operation_type.set(v);
+                }
             }
             break;
         

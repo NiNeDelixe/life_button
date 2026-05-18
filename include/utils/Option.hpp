@@ -17,7 +17,7 @@ public:
     virtual const T& get() const { return value; };
 
 public:
-
+    //typedef type = typename(T);
 
 protected:
     T value;
@@ -108,7 +108,7 @@ private:
     size_t size = 0;
 };
 
-template<class TYPE, int n>
+template<class TYPE, size_t n>
 class StaticArrayOption : public IOption<std::array<TYPE, n>>
 {
 public:
@@ -154,6 +154,19 @@ public:
 
     TYPE& operator[](size_t index) { return this->value[index]; }
     const TYPE& operator[](size_t index) const { return this->value[index]; }
+};
+
+template<class TYPE, size_t n>
+class StaticChoiseOptions : public StaticArrayOption<TYPE, n>
+{
+public:
+    // StaticArrayOption<TYPE, n>::StaticArrayOption();
+    // StaticArrayOption<TYPE, n>::StaticArrayOption(const std::array<TYPE, n>&);
+    // StaticArrayOption<TYPE, n>::StaticArrayOption(std::initializer_list<TYPE>);
+    // StaticArrayOption<TYPE, n>::StaticArrayOption(TYPE, TYPE, TYPE);
+
+private:
+    size_t choise = 0;
 };
 
 // template<class TYPE>

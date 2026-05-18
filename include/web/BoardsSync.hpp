@@ -10,25 +10,43 @@
 
 namespace web
 {
-    class WifiSync;
+    class BoardsSync;
 };
 
-class web::WifiSync
+class web::BoardsSync
 {
+    DECLARE_CLASS(BoardsSync)
+
 private:
-    typedef struct Data
+    struct Data
     {
         int value;
     };
 
 public:
-    WifiSync();
-    ~WifiSync() = default;
+    enum class BoardSyncMode : uint8_t
+    {
+        OFF,
+        TRANSMIT,
+        RECIVE
+    };
+
+private:
+    BoardsSync();
+
+public:
+    ~BoardsSync() = default;
 
 public:
     void onStart();
     void update();
 
+    void changeMode(BoardSyncMode mode);
+    void changeMode(uint8_t mode) { changeMode((BoardSyncMode)mode); }
+
+    void sendRawData(void* data, size_t size);
+
+public:
     static void onReceiveStatic(const uint8_t * mac, const uint8_t *incomingData, int len);
     void onReceive(const uint8_t * mac, const uint8_t *incomingData, int len);
 
@@ -38,10 +56,7 @@ private:
 
     Data m_data;
 
-    bool is_transmitter = true;
-
-public:
-    static WifiSync* instance;
+    BoardSyncMode m_mode = BoardSyncMode::RECIVE;
 };
 
 #endif  // WEB_WIFISYNC_HPP_

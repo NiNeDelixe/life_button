@@ -9,11 +9,13 @@ led_bar::Worker::Worker()
 void led_bar::Worker::turnOn()
 {
     state = true;
+    digitalWrite(ESP_EXTERNAL_LED_BAR_PIN, HIGH);
 }
 
 void led_bar::Worker::turnOff()
 {
     state = false;
+    digitalWrite(ESP_EXTERNAL_LED_BAR_PIN, LOW);
 }
 
 void led_bar::Worker::changeState()

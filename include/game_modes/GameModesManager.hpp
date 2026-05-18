@@ -17,6 +17,7 @@ public:
 
     void setGameMode(GameMode* gamemode) { m_current_gamemode = gamemode; }
     GameMode* getCurrentGameMode() { return m_current_gamemode; }
+    GameModeType getCurrentGameType() { return m_current_gametype; }
 
     void saveCurrent();
 
@@ -29,4 +30,4 @@ public:
     GameModeType m_current_gametype = GameModeType::BOMB;
 };
 
-#endif
+#endif  // GAME_MODES_GAMEMODESMANAGER_HPP_
