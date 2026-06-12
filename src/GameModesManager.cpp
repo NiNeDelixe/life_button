@@ -1,7 +1,7 @@
 #include "game_modes/GameModesManager.hpp"
 
 #include "game_modes/bomb/Bomb.hpp"
-//#include "game_modes/king_of_the_hill/"
+#include "game_modes/king_of_the_hill/KingOfTheHill.hpp"
 #include "game_modes/lifes/Lifes.hpp"
 #include "game_modes/point_farming/PointFarming.hpp"
 
@@ -55,7 +55,7 @@ void GameModesManager::crateGameMode(const GameModeType &type)
         break;
 
     case GameModeType::KOTH:
-        // не реализовано
+        m_current_gamemode = new KingOfTheHill();
         break;
 
     default:

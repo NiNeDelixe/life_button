@@ -8,6 +8,7 @@
 #include "game_modes/GameModesManager.hpp"
 #include "game_modes/lifes/Lifes.hpp"
 #include "game_modes/bomb/Bomb.hpp"
+#include "game_modes/king_of_the_hill/KingOfTheHill.hpp"
 
 #include "externals/beeper/Worker.hpp"
 #include "externals/button/led/Worker.hpp"

@@ -76,12 +76,12 @@ void web::WebInterface::onStart()
         case GameModeType::LIFES :
             json = "{";
             json += "\"lifes\":70,";
-            json += "\"timer\":4294967294";
+            json += "\"timer\":4294967.294";
             json += "}";
             break;
         case GameModeType::POINT :
             json = "{";
-            json += "\"timer\":4294967294,";
+            json += "\"timer\":4294967.294,";
             json += "\"operation_value\":1,";
             json += "\"start_value\":0,";
             json += "\"operation_type\":[0,1,2]";
@@ -90,14 +90,20 @@ void web::WebInterface::onStart()
         
         case GameModeType::BOMB :
             json = "{";
-            json += "\"timer\":45000,";
-            json += "\"defuse\":10000,";
-            json += "\"plant\":3200";
+            json += "\"timer\":45,";
+            json += "\"defuse\":10,";
+            json += "\"plant\":3.2";
             json += "}";
             break;
         
         case GameModeType::KOTH :
-            json = "{}";
+            json = "{";
+            json += "\"game_time\":4294967.294,";
+            json += "\"hold_time\":5,";
+            json += "\"points_multiplier\":1,";
+            json += "\"is_need_to_hold_button\":false,";
+            json += "\"points_to_win\":10000";
+            json += "}";
             break;
 
         default:
@@ -128,7 +134,7 @@ void web::WebInterface::onStart()
                 {
                     int v = request->getParam("timer")->value().toInt();
                     //lf->setTimer(v);
-                    lf->options.timer_option.set(v);
+                    lf->options.timer_option.set(TIME_S(v));
                 }
                 lf->start();
             }
@@ -140,7 +146,7 @@ void web::WebInterface::onStart()
                 if (request->hasParam("timer")) 
                 {
                     int v = request->getParam("timer")->value().toInt();
-                    po->options.timer.set(v);
+                    po->options.timer.set(TIME_S(v));
                 }
                 if (request->hasParam("operation_value")) 
                 {
@@ -166,22 +172,50 @@ void web::WebInterface::onStart()
                 if (request->hasParam("timer")) 
                 {
                     int v = request->getParam("timer")->value().toInt();
-                    bm->options.timer_option.set(v);
+                    bm->options.timer_option.set(TIME_S(v));
                 }
                 if (request->hasParam("defuse")) 
                 {
                     int v = request->getParam("defuse")->value().toInt();
-                    bm->options.defuse_option.set(v);
+                    bm->options.defuse_option.set(TIME_S(v));
                 }
                 if (request->hasParam("plant")) 
                 {
                     int v = request->getParam("plant")->value().toInt();
-                    bm->options.plant_option.set(v);
+                    bm->options.plant_option.set(TIME_S(v));
                 }
             }
             break;
         
         case GameModeType::KOTH :
+            {
+                KingOfTheHill* koth = (KingOfTheHill*)Polling::mode_manager.getCurrentGameMode();
+                if (request->hasParam("game_time")) 
+                {
+                    int v = request->getParam("game_time")->value().toInt();
+                    koth->options.game_time.set(TIME_S(v));
+                }
+                if (request->hasParam("hold_time")) 
+                {
+                    int v = request->getParam("hold_time")->value().toInt();
+                    koth->options.hold_time.set(TIME_S(v));
+                }
+                if (request->hasParam("is_need_to_hold_button")) 
+                {
+                    bool v = request->getParam("is_need_to_hold_button")->value().toInt();
+                    koth->options.is_need_to_hold_button.set(v);
+                }
+                if (request->hasParam("points_multiplier")) 
+                {
+                    int v = request->getParam("points_multiplier")->value().toInt();
+                    koth->options.points_multiplier.set(v);
+                }
+                if (request->hasParam("points_to_win")) 
+                {
+                    int v = request->getParam("points_to_win")->value().toInt();
+                    koth->options.points_to_win.set(v);
+                }
+            }
             break;
 
         default:
