@@ -11,8 +11,9 @@ public:
 
     //change data and data_size to send data
     virtual void onSend(void* data, size_t& data_size) = 0;
-    //data and data_size is reciveng from other board
-    virtual void onRecive(void* data, size_t data_size) = 0;
+    //data and data_size is receiving from other board
+    //sender_address is the address of the device that sent the data (0 if broadcast)
+    virtual void onRecive(void* data, size_t data_size, uint64_t sender_address = 0) = 0;
 
 private:
     
