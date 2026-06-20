@@ -3,29 +3,42 @@
 
 using pin_t = uint8_t;
 
-constexpr pin_t ESP_CIRCUIT_BLUE_LED_PIN = 8;
+constexpr pin_t ESP_CIRCUIT_BLUE_LED_PIN = -1;
 
 constexpr pin_t ESP_EXTERNAL_BUTTON_PIN = 1;
-constexpr pin_t ESP_EXTERNAL_BUTTON_LED_PIN = 0;
+constexpr pin_t ESP_EXTERNAL_BUTTON_LED_PIN = 2;
 
-constexpr pin_t ESP_EXTERNAL_DIGIT_DISPLAY_CLK_PIN = 2;
-constexpr pin_t ESP_EXTERNAL_DIGIT_DISPLAY_DIO_PIN = 3;
+constexpr pin_t ESP_EXTERNAL_DIGIT_DISPLAY_CLK_PIN = 40;
+constexpr pin_t ESP_EXTERNAL_DIGIT_DISPLAY_DIO_PIN = 41;
 
 constexpr pin_t ESP_EXTERNAL_BEEPER_PIN = 6;
 
-constexpr pin_t ESP_EXTERNAL_LED_STRIP_PIN = 5;
+constexpr pin_t ESP_EXTERNAL_LED_STRIP_PIN = 39;
 constexpr size_t ESP_EXTERNAL_LED_STRIP_COUNT = 18;
 #define ESP_EXTERNAL_LED_STRIP_COLOR_ORDER GRB
 #define ESP_EXTERNAL_LED_STRIP_TYPE WS2812
 
-constexpr pin_t ESP_EXTERNAL_LED_BAR_PIN = 4;
+//Liquid Crystal
+constexpr pin_t ESP_EXTERNAL_BAR_DISPLAY_I2C_ADDRES = 0x27;
+constexpr pin_t ESP_EXTERNAL_BAR_DISPLAY_LINE_COUNT = 2;
+constexpr pin_t ESP_EXTERNAL_BAR_DISPLAY_CHARS_COUNT = 16;
+[[DEPRECATED]] constexpr pin_t ESP_EXTERNAL_LED_BAR_PIN = -1; //DEPRECATED
 
-constexpr pin_t ESP_EXTERNAL_RFID_RST_PIN = 8;
-constexpr pin_t ESP_EXTERNAL_RFID_SS_PIN = 200; //
+//RFID
+constexpr pin_t ESP_EXTERNAL_RFID_RST_PIN = 14;
+constexpr pin_t ESP_EXTERNAL_RFID_SS_PIN = 10;
 
-constexpr pin_t ESP_EXTERNAL_RFID_SPI_SCK_PIN = 4;
-constexpr pin_t ESP_EXTERNAL_RFID_SPI_MISO_PIN = 5;
-constexpr pin_t ESP_EXTERNAL_RFID_SPI_MOSI_PIN = 6;
+constexpr pin_t ESP_EXTERNAL_RFID_SPI_SCK_PIN = 12;
+constexpr pin_t ESP_EXTERNAL_RFID_SPI_MISO_PIN = 13;
+constexpr pin_t ESP_EXTERNAL_RFID_SPI_MOSI_PIN = 11;
+
+//LORA
+constexpr pin_t ESP_EXTERNAL_LORA_M0_PIN = 15;
+constexpr pin_t ESP_EXTERNAL_LORA_M1_PIN = 16;
+//  USARD
+constexpr pin_t ESP_EXTERNAL_LORA_RX_PIN = 17;
+constexpr pin_t ESP_EXTERNAL_LORA_TX_PIN = 18;
+constexpr pin_t ESP_EXTERNAL_LORA_AUX_PIN = 7;
 
 
 #endif  // CORE_CONSTANTS_HPP_
