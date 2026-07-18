@@ -4,6 +4,7 @@
 #include "game_modes/king_of_the_hill/KingOfTheHill.hpp"
 #include "game_modes/lifes/Lifes.hpp"
 #include "game_modes/point_farming/PointFarming.hpp"
+#include "game_modes/sync_start/SyncStart.hpp"
 
 GameModesManager::GameModesManager()
     : SaveManager(nullptr, 0)
@@ -56,6 +57,10 @@ void GameModesManager::crateGameMode(const GameModeType &type)
 
     case GameModeType::KOTH:
         m_current_gamemode = new KingOfTheHill();
+        break;
+
+    case GameModeType::SYNC_START :
+        m_current_gamemode = new SyncStart();
         break;
 
     default:

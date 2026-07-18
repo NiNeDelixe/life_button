@@ -6,6 +6,8 @@ void PointFarming::start()
 {
     led_display::Worker::getInstance().clear();
     led_display::Worker::getInstance().setNumber(options.start_value.get());
+    HasCounter::clear();
+    applyToCounter(options.start_value.get(), Counter::operators::SET);
     button::Worker::getInstance().setOnPress(&PointFarming::onPress);
     button::Worker::getInstance().setOnRelease(&PointFarming::onRelease);
 
@@ -16,7 +18,7 @@ void PointFarming::update()
 {
     led_display::Worker::getInstance().setNumber(getCount());
 
-    if (button::Worker::getInstance().isPressed())
+    if (button::Worker::getInstance().isPressedOnce())
     {
         startTimer();
         applyToCounter(options.operation_value.get(), Counter::operators::ADD);

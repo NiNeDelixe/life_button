@@ -15,6 +15,7 @@ public:
 public:
     virtual void set(const T& new_value) { value = new_value; };
     virtual const T& get() const { return value; };
+    virtual const char* toString() const { return "IOption"; };
 
 public:
     //typedef type = typename(T);

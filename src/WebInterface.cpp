@@ -14,11 +14,17 @@ AsyncWebServer server(80);
 
 void web::WebInterface::onStart()
 {
-    //WiFi.disconnect(true);
-    WiFi.mode(WIFI_STA);
+    WiFi.mode(WIFI_OFF);
+    WiFi.mode(WIFI_AP_STA);
+    
+    // Создание уникального SSID
+    uint8_t mac[6];
+    WiFi.macAddress(mac);
+    snprintf(ssid, sizeof(ssid), "ESP_%02X%02X%02X%02X%02X%02X", 
+             mac[0], mac[1], mac[2], mac[3], mac[4], mac[5]);
 
     WiFi.softAP(ssid); // 192.168.4.1
-    //WiFi.setTxPower(WIFI_POWER_8_5dBm);
+    WiFi.setTxPower(WIFI_POWER_8_5dBm);
 
     server.on("/", HTTP_GET, [](AsyncWebServerRequest *request){
         request->send_P(200, "text/html", index_html);
@@ -103,6 +109,12 @@ void web::WebInterface::onStart()
             json += "\"points_multiplier\":1,";
             json += "\"is_need_to_hold_button\":false,";
             json += "\"points_to_win\":10000";
+            json += "}";
+            break;
+
+        case GameModeType::SYNC_START :
+            json = "{";
+            json += "\"timer\":5";
             json += "}";
             break;
 
@@ -214,6 +226,17 @@ void web::WebInterface::onStart()
                 {
                     int v = request->getParam("points_to_win")->value().toInt();
                     koth->options.points_to_win.set(v);
+                }
+            }
+            break;
+
+        case GameModeType::SYNC_START :
+            {
+                SyncStart* ss = (SyncStart*)Polling::mode_manager.getCurrentGameMode();
+                if (request->hasParam("timer")) 
+                {
+                    int v = request->getParam("timer")->value().toInt();
+                    ss->options.timer.set(TIME_S(v));
                 }
             }
             break;

@@ -3,8 +3,11 @@
 
 #include "core/core.hpp"
 
-#include <SPI.h>
 #include <vector>
+
+#include <SPI.h>
+#include <RadioLib.h>
+
 #include "externals/IWorker.hpp"
 
 #include "game_modes/ISyncable.hpp"
@@ -22,28 +25,32 @@ private:
     Worker();
 
 public:
-    ~Worker() = default;
+    ~Worker();
+
+    using ReceiveCallback = std::function<void(const ISyncable::Data &, uint16_t)>;
+    using SendCallback = std::function<bool(HardwareSerial&)>;
 
 public:
-    void update() override;
-
-public:
+    void update();
     void sendAllMessages();
     void addISyncableClass(ISyncable* class_to_add);
-
+    bool send(ISyncable* class_from_send, uint16_t target_address = 0xFFFF);
+    bool send(uint16_t address, const SendCallback& callback);
+    
+    void setReceiveCallback(ReceiveCallback callback);
+    void setTargetAddress(uint16_t address);
+    uint16_t getTargetAddress() const;
+    
 private:
     std::vector<ISyncable*> m_classes;
+    ReceiveCallback m_receiveCallback;
+    uint16_t m_targetAddress = 0xFFFF;
 
-    byte m_msg_count = 0;            // count of outgoing messages
-    byte m_destination = 0xFF;      // destination to send to
-    long m_last_send_time = 0;        // last send time
-    int m_interval = 2000;          // interval between sends
-
-#ifdef ESP8266
-    uint64_t m_local_address = ESP.getChipId();
-#elif defined(ESP32)
-    uint64_t m_local_address = ESP.getEfuseMac();
-#endif
+    HardwareSerial LoRaSerial = HardwareSerial(2);
+    
+    void processReceivedData();
+    bool setMode(uint8_t m0, uint8_t m1);
+    bool waitForAuxReady(unsigned long timeout_ms = 5000);
 };
 
-#endif LORA_WORKER_HPP_
+#endif // LORA_WORKER_HPP_

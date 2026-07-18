@@ -73,7 +73,7 @@ public:
     UID getUIDCard();
 
 private:
-    MFRC522 m_rfid; //= MFRC522(ESP_EXTERNAL_RFID_SS_PIN, ESP_EXTERNAL_RFID_RST_PIN);
+    MFRC522 m_rfid;
     MFRC522::MIFARE_Key m_key;
     MFRC522::StatusCode m_status;
 

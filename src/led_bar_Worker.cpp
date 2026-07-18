@@ -29,6 +29,7 @@ void led_bar::Worker::setText(const char *text)
 {
     lcd.clear();
     lcd.backlight();
+    lcd.print(text);
 }
 
 void led_bar::Worker::update() 

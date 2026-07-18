@@ -17,11 +17,14 @@
 #include "externals/led_strip/Worker.hpp"
 #include "externals/led_display/Worker.hpp"
 #include "externals/rfid/Worker.hpp"
+#include "externals/lora/Worker.hpp"
 
 #include "logic/saving/Saveing.hpp"
 
 #include "web/WebInterface.hpp"
 #include "web/BoardsSync.hpp"
+
+#include "utils/Delay.hpp"
 
 
 class Polling

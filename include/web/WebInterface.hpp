@@ -4,6 +4,7 @@
 #include "core/core.hpp"
 
 #include "game_modes/point_farming/PointFarming.hpp"
+#include "game_modes/sync_start/SyncStart.hpp"
 
 #include "externals/led_circuit/Worker.hpp"
 //#include "externals/led_display/Worker.hpp"
@@ -27,7 +28,7 @@ public:
     void update();
 
 private:
-    const char* ssid = "ESP32";
+    char ssid[64];
     const char* password = "12345678";
 };
 

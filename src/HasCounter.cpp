@@ -1,14 +1,13 @@
 #include "game_modes/HasCounter.hpp"
 
-#include <unordered_map>
-
-std::unordered_map<int, Counter> HasCounter::m_counters = {};
-Counter& HasCounter::m_current_counter = HasCounter::m_counters[0];
+std::vector<Counter> HasCounter::m_counters = {Counter()};
+Counter* HasCounter::m_current_counter = &HasCounter::m_counters.front();
+int HasCounter::m_counters_count = 1;
+Counter HasCounter::counter = Counter();
 
 HasCounter::HasCounter()
 {
-    HasCounter::m_counters.emplace();
-    HasCounter::m_current_counter = HasCounter::m_counters[0];
+    HasCounter::clear();
 }
 
 void HasCounter::applyToCounter(const int& num, const Counter::operators &oper)
@@ -16,13 +15,13 @@ void HasCounter::applyToCounter(const int& num, const Counter::operators &oper)
     switch (oper)
     {
     case Counter::operators::ADD:
-        m_current_counter.count += num;
+        m_current_counter->count += num;
         break;
     case Counter::operators::DIV:
-        m_current_counter.count -= num;
+        m_current_counter->count -= num;
         break;
     case Counter::operators::SET:
-        m_current_counter.count = num;
+        m_current_counter->count = num;
         break;
     
     default:
@@ -30,26 +29,35 @@ void HasCounter::applyToCounter(const int& num, const Counter::operators &oper)
     }
 }
 
-void HasCounter::applyToCounter(const int& counter, const int &num, const Counter::operators &oper)
+void HasCounter::applyToCounter(const int& counterIdx, const int &num, const Counter::operators &oper)
 {
-    if (m_counters.find(counter) != m_counters.end())
+    if (static_cast<size_t>(counterIdx) < m_counters.size())
     {
-        m_current_counter = m_counters[counter];
+        m_current_counter = &m_counters[counterIdx];
         applyToCounter(num, oper);
     }
-    
+}
+
+void HasCounter::clear()
+{
+    m_counters_count = 1;
+    m_counters.clear();
+    m_counters.push_back(Counter());
+    m_current_counter = &m_counters.front();
 }
 
 int HasCounter::addCounter() 
 {
-    return m_counters.emplace().first.operator*().first;
+    m_counters.push_back(Counter());
+    m_counters_count++;
+    return m_counters.size() - 1;
 }
 
-bool HasCounter::setCurrentCaunter(const int &counter)
+bool HasCounter::setCurrentCaunter(const int &counterIdx)
 {
-    if (m_counters.find(counter) != m_counters.end())
+    if (m_counters.size() > static_cast<size_t>(counterIdx))
     {
-        m_current_counter = m_counters[counter];
+        m_current_counter = &m_counters[counterIdx];
         return true;
     }
     return false;

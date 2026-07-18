@@ -19,6 +19,8 @@ void KingOfTheHill::start()
     led_strip::Worker::getInstance().changeColor(255, 255, 255); //white
     led_bar::Worker::getInstance().turnOn();
 
+    HasCounter::clear();
+
     HasTimer::setTimer(options.game_time.get());
 
     is_end_by_points = false;
@@ -151,8 +153,6 @@ void KingOfTheHill::updateConquestTeam()
 
 void KingOfTheHill::updateTimer()
 {
-    HasTimer::updateTimer();
-
     //render timer on number display
     led_display::Worker::getInstance().setNumber(HasTimer::getTime() / 1000);
 

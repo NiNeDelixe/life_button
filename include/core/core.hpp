@@ -36,10 +36,14 @@ constexpr esp_time_t esp_time_t_max_value = 4294967295;
 
 #define DIGITAL_OUTPUT HIGH
 
+#define BEEPER_DIGITAL_OFF_OUTPUT LOW
+
 #ifdef DEBUG
 #define BEEPER_DIGITAL_OUTPUT LOW
+#define BEEPER_DIGITAL_ON_OUTPUT LOW
 #else
 #define BEEPER_DIGITAL_OUTPUT HIGH
+#define BEEPER_DIGITAL_ON_OUTPUT HIGH
 #endif
 
 #define TIME_NS(time) (time)

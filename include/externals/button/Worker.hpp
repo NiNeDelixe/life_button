@@ -37,6 +37,9 @@ public:
     bool isPressed() const { return is_pressed; }
     bool isReleased() const { return is_released; }
 
+    bool isPressedOnce();
+    bool isReleasedOnce();
+
 public:
     void update() override;
 

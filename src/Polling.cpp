@@ -13,10 +13,13 @@ void Polling::startUp()
     
     //mode_manager.crateGameMode(GameModeType::LIFES);
     led_bar::Worker::getInstance().turnOff();
+
+    led_bar::Worker::getInstance().setText("test");
 }
 
 void Polling::poll()
 {
+    Delay::update();
     web::BoardsSync::getInstance().update();
     web::WebInterface::getInstance().update();
     led_circuit::Worker::getInstance().update();
@@ -25,6 +28,11 @@ void Polling::poll()
     led_bar::Worker::getInstance().update();
     led_strip::Worker::getInstance().update();
     button::Worker::getInstance().update();
+    rfid::Worker::getInstance().update();
+    lora::Worker::getInstance().update();
+
+    // if (HasTimer* timer = (HasTimer*)(mode_manager.getCurrentGameMode()))
+    //     timer->updateTimer();
     
     mode_manager.update();
 }

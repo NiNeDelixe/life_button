@@ -16,6 +16,8 @@ void Bomb::start()
     explode = false;
     defused = false;
     is_beepd = false;
+
+    HasCounter::clear();
 }
 
 void Bomb::update()
@@ -48,9 +50,9 @@ void Bomb::updatePlant()
 
     if (button::Worker::getInstance().isPressed())
     {            
-        EVERY_MS(100)
+        EVERY_MS(1000)
         {
-            current_plant_time += 100;
+            current_plant_time += 1000;
         }
 
         if (!is_beepd)
@@ -77,6 +79,12 @@ void Bomb::updatePlant()
 
 void Bomb::updateDefuse()
 {
+    if (!planted)
+    {
+        return;
+    }
+    
+
     if (button::Worker::getInstance().isPressed() && planted)
     {
         if (!is_beepd)
@@ -85,9 +93,9 @@ void Bomb::updateDefuse()
             is_beepd = true;
         }
 
-        EVERY_MS(100)
+        EVERY_MS(1000)
         {
-            current_defusing_time += 100;
+            current_defusing_time += 1000;
         }
 
         if (current_defusing_time >= options.defuse_option.get())
@@ -105,13 +113,16 @@ void Bomb::updateDefuse()
 
 void Bomb::updateTimer()
 {
-    EVERY_MS(100)
+    if (!planted)
+    {
+        return;
+    }
+
+    EVERY_MS(1000)
     {
         led_bar::Worker::getInstance().turnOff();
-        if (planted)
-        {
-            current_timer += 100;
-        }
+        
+        current_timer += 1000;
     }
     
     if (options.timer_option.get() - current_timer <= options.timer_option.get() / TIME_S(10))
@@ -131,7 +142,10 @@ void Bomb::updateTimer()
         }
     }  
 
-    led_display::Worker::getInstance().setNumber((options.timer_option.get() - current_timer) / TIME_S(1));
+    if (planted)
+    {
+        led_display::Worker::getInstance().setNumber((options.timer_option.get() - current_timer) / TIME_S(1));
+    }
 
     if (current_timer >= options.timer_option.get())
     {

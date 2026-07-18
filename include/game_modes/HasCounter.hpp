@@ -5,7 +5,7 @@
 
 #include "logic/counter/Counter.hpp"
 
-#include <unordered_map>
+#include <vector>
 
 class HasCounter
 {
@@ -16,15 +16,18 @@ public:
 public:
     static void applyToCounter(const int& num, const Counter::operators& oper);
     static void applyToCounter(const int& counter, const int& num, const Counter::operators& oper);
-    static int getCount() { return m_current_counter.count; }
+    static int getCount() { return m_current_counter->count; }
+    static void clear();
 
     static int addCounter();
-    static Counter& getCurrentCaunter() { return m_current_counter; };
+    static Counter& getCurrentCaunter() { return *m_current_counter; };
     static bool setCurrentCaunter(const int& counter);
 
 protected:
-    static Counter& m_current_counter;
-    static std::unordered_map<int, Counter> m_counters;
+    static Counter* m_current_counter;
+    static std::vector<Counter> m_counters;
+    static int m_counters_count;
+    static Counter counter;
 };
 
 #endif  // GAME_MODES_HASCOUNTER_HPP_

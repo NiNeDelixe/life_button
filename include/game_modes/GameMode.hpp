@@ -10,7 +10,8 @@ enum class GameModeType : uint8_t
     BOMB,
     KOTH,
     LIFES,
-    POINT
+    POINT,
+    SYNC_START
 };
 
 class GameMode

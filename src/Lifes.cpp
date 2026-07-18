@@ -7,7 +7,11 @@ void Lifes::start()
     button::Worker::getInstance().setOnPress(&Lifes::onPress);
     button::Worker::getInstance().setOnRelease(&Lifes::onRelease);
 
+    //HasCounter::clear();
+
     applyToCounter(options.lifes_option.get(), Counter::operators::SET);
+    
+    //led_bar::Worker::getInstance().setText(options.lifes_option.toString());
 
     is_dead = false;
     is_beep = false;
@@ -19,7 +23,6 @@ void Lifes::start()
 void Lifes::update()
 {
     updateTimer();
-    
     if (!is_time_end)
     {
         led_display::Worker::getInstance().setNumber(getCount());
@@ -40,7 +43,7 @@ void Lifes::update()
         is_dead = true;
     }
 
-    if (is_dead && !is_beep)
+    if (is_dead || is_time_end && !is_beep)
     {
         button::led::Worker::getInstance().setState(true);
         beeper::Worker::getInstance().beepSeconds(TIME_S(10));
