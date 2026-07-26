@@ -1,11 +1,14 @@
 #include "externals/led_bar/Worker.hpp"
 
+#include "utils/Delay.hpp"
+
 led_bar::Worker::Worker()
     : lcd(ESP_EXTERNAL_BAR_DISPLAY_I2C_ADDRES, ESP_EXTERNAL_BAR_DISPLAY_CHARS_COUNT, ESP_EXTERNAL_BAR_DISPLAY_LINE_COUNT)
 {
-    // set the LCD address to 0x27 for a 16 chars and 2 line display
     lcd.init();
     lcd.clear();
+
+    is_displayed_new_text = false;
 }
 
 void led_bar::Worker::turnOn()
@@ -28,12 +31,50 @@ void led_bar::Worker::changeState()
 void led_bar::Worker::setText(const char *text)
 {
     lcd.clear();
-    lcd.backlight();
-    lcd.print(text);
+
+    setText(text, 0);
 }
 
-void led_bar::Worker::update() 
+void led_bar::Worker::setText(const char *text, const int &line_num)
 {
+    if (line_num < 0 || line_num >= ESP_EXTERNAL_BAR_DISPLAY_LINE_COUNT)
+        return;
+
+    if (displayed_text[line_num] == text)
+        return;
+
+    displayed_text[line_num] = text;
+    
+
+    is_displayed_new_text = true;
+
+    lcd.setCursor(0, line_num);
+    lcd.print("                ");
+    lcd.setCursor(0, line_num);
+    lcd.print(text);
+
+    lcd.backlight();
+
+    Delay::setTimeout(2000, []() {
+        auto &w = led_bar::Worker::getInstance();
+        w.is_displayed_new_text = false;
+        w.update();
+    });
+}
+
+void led_bar::Worker::clear()
+{
+    lcd.clear();
+}
+
+void led_bar::Worker::update()
+{
+    if (is_displayed_new_text)
+    {
+        return;
+    }
+    
+
     if (state)
     {
         lcd.backlight();

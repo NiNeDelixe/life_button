@@ -25,6 +25,12 @@ public:
     static void onPress();
     static void onRelease();
 
+    void confirmReady();
+    void setReady();
+    void updateButtonTimer();
+
+    void startButtonTimer();
+
     ISyncable::Data onSend() override;
     void onRecive(const ISyncable::Data& data) override;
 
@@ -34,7 +40,10 @@ public:
 public:
     SyncStartOptions options;
     std::vector<uint8_t> m_sendBuffer;
+
 private:
+    bool is_this_side_ready;
+    bool is_other_side_ready;
 };
 
 #endif  // SYNC_START_SYNCSTART_HPP_

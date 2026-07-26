@@ -152,17 +152,16 @@ void Worker::processReceivedData()
     if (!LoRaSerial.available())
         return;
 
-    std::vector<uint8_t> buffer;
+    size_t size = LoRaSerial.available();
 
-    size_t read = LoRaSerial.readBytes(
-        buffer.data(),
-        buffer.size()
-    );
+    std::vector<uint8_t> buffer(size);
+
+    LoRaSerial.readBytes(buffer.data(), size);
 
     ISyncable::Data data
     {
         buffer.data(),
-        read
+        size
     };
 
     while (LoRaSerial.available())

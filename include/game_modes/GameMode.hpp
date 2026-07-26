@@ -14,6 +14,19 @@ enum class GameModeType : uint8_t
     SYNC_START
 };
 
+inline const char* to_string(GameModeType v)
+{
+    switch (v)
+    {
+        case GameModeType::BOMB:   return "Bomb";
+        case GameModeType::KOTH:   return "King of the hill";
+        case GameModeType::LIFES: return "Lifes";
+        case GameModeType::POINT: return "Point farming";
+        case GameModeType::SYNC_START: return "Sync start";
+        default:      return "[Unknown GameModeType]";
+    }
+}
+
 class GameMode
 {
 public:

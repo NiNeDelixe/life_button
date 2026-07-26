@@ -11,7 +11,7 @@ void Lifes::start()
 
     applyToCounter(options.lifes_option.get(), Counter::operators::SET);
     
-    //led_bar::Worker::getInstance().setText(options.lifes_option.toString());
+    led_bar::Worker::getInstance().setText(options.lifes_option.toString(), 1);
 
     is_dead = false;
     is_beep = false;

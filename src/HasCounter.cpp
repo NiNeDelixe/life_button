@@ -40,9 +40,8 @@ void HasCounter::applyToCounter(const int& counterIdx, const int &num, const Cou
 
 void HasCounter::clear()
 {
-    m_counters_count = 1;
     m_counters.clear();
-    m_counters.push_back(Counter());
+    addCounter();
     m_current_counter = &m_counters.front();
 }
 

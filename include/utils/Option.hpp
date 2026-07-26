@@ -20,6 +20,15 @@ public:
 public:
     //typedef type = typename(T);
 
+    bool operator==(const IOption& lval) const
+    {
+        return value == lval.get();
+    }
+    bool operator==(const T& lval) const
+    {
+        return value == lval;
+    }
+
 protected:
     T value;
 };
@@ -30,6 +39,20 @@ public:
     IntOption() = default;
     IntOption(int value) { this->value = value; }
     ~IntOption() = default;
+
+    const char* toString() const override 
+    { 
+        int val = this->value;
+        int n = log10(val) + 1;
+        int i;
+        char *numberArray = (char*)calloc(n, sizeof(char));
+        memset(&numberArray[0], 0, sizeof(numberArray));
+        for (i = n-1; i >= 0; --i, val /= 10)
+        {
+            numberArray[i] = (val % 10) + '0';
+        }
+        return numberArray;
+    };
 
 private:
     

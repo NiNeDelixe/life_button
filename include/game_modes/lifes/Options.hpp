@@ -9,10 +9,12 @@
 
 #include "logic/saving/ISaveble.hpp"
 
+constexpr int default_lifes = 70;
+
 struct LifesOptions : public GameModeOptions
 {
     TimeOption timer_option = TimeOption(esp_time_t_max_value);
-    IntOption lifes_option = IntOption(70);
+    IntOption lifes_option = IntOption(default_lifes);
 
     void save(Preferences& prefs) const override
     {
@@ -22,7 +24,7 @@ struct LifesOptions : public GameModeOptions
 
     void load(Preferences& prefs) override
     {
-        lifes_option = prefs.getInt("lf_lifes", 70);
+        lifes_option = prefs.getInt("lf_lifes", default_lifes);        
         timer_option = prefs.getInt("lf_timer", esp_time_t_max_value);
     }
 };

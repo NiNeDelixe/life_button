@@ -11,10 +11,11 @@ void Polling::startUp()
     web::WebInterface::getInstance().onStart();
     led_display::Worker::getInstance().clear();
     
-    //mode_manager.crateGameMode(GameModeType::LIFES);
     led_bar::Worker::getInstance().turnOff();
 
     led_bar::Worker::getInstance().setText("test");
+
+    mode_manager.createSavedGamemode();
 }
 
 void Polling::poll()

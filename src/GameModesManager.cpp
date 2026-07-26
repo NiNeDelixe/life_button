@@ -6,16 +6,14 @@
 #include "game_modes/point_farming/PointFarming.hpp"
 #include "game_modes/sync_start/SyncStart.hpp"
 
+//#include "core/Polling.hpp"
+
 GameModesManager::GameModesManager()
     : SaveManager(nullptr, 0)
 {
     m_current_gamemode = nullptr;
 
     begin("game");
-
-    uint8_t type = prefs.getUChar("gm_type", static_cast<uint8_t>(GameModeType::LIFES));
-
-    crateGameMode(static_cast<GameModeType>(type));
 }
 
 GameModesManager::~GameModesManager()
@@ -70,15 +68,40 @@ void GameModesManager::crateGameMode(const GameModeType &type)
     if (m_current_gamemode)
     {
         loadCurrent();
-
-        m_current_gamemode->start();
+        
         m_current_gametype = type;
 
+        defaultSetupGamemode();
+
+        m_current_gamemode->start();
+
         saveCurrent();
+
+        
     }
 }
 
-void GameModesManager::saveCurrent()
+void GameModesManager::createSavedGamemode()
+{
+    uint8_t type = prefs.getUChar("gm_type", static_cast<uint8_t>(GameModeType::LIFES));
+
+    crateGameMode(static_cast<GameModeType>(type));
+}
+
+void GameModesManager::defaultSetupGamemode()
+{
+    led_bar::Worker::getInstance().turnOff();
+    led_bar::Worker::getInstance().clear();
+    led_bar::Worker::getInstance().setText(to_string(m_current_gametype), 0);
+
+    //led_display::Worker::getInstance().clear();
+
+    //button::led::Worker::getInstance().turnOff();
+    button::Worker::getInstance().setOnPress(nullptr);
+    button::Worker::getInstance().setOnRelease(nullptr);
+}
+
+void GameModesManager::saveCurrent() 
 {
     if (!m_current_gamemode) return;
 
