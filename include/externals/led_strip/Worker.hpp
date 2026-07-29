@@ -3,7 +3,10 @@
 
 #include "core/core.hpp"
 
-//#include <FastLED.h>
+#include <tuple>
+
+#include <NeoPixelBus.h>
+#include <NeoPixelAnimator.h>
 
 #include "externals/IWorker.hpp"
 
@@ -15,17 +18,16 @@ namespace led_strip
     {
         enum class Mode : uint8_t
         {
-            STATIC,     // постоянный свет
-            BLINK,      // мигание
-            FADE,       // плавное затухание/нарастание
-            PULSE,      // пульсация
+            STATIC,
+            BLINK,
+            FADE,
+            PULSE,
             OFF
         };
 
         Mode mode = Mode::OFF;
 
         uint32_t color = 0xFFFFFF;   // RGB (0xRRGGBB)
-        uint8_t brightness = 50;    // 0-255
 
         uint16_t start_index = 0; // с какого светодиода начинать
         uint16_t count = 0;       // сколько светодиодов задействовано (0 = все)
@@ -52,10 +54,36 @@ namespace led_strip
         };
 
         bool loop = true;
+
+        void setBrightness(uint8_t new_brightness)
+        {
+            uint8_t r = (color >> 16) & 0xFF;
+            uint8_t g = (color >> 8) & 0xFF;
+            uint8_t b = color & 0xFF;
+
+            uint8_t old_v = std::max({r, g, b});
+            if (old_v == 0)
+            {
+                r = g = b = new_brightness;
+            }
+            else
+            {
+                uint8_t scale = new_brightness / old_v;
+                r = std::round(r * scale);
+                g = std::round(g * scale);
+                b = std::round(b * scale);
+            }
+            
+            r = std::max((uint8_t)0, std::min((uint8_t)255, r));
+            g = std::max((uint8_t)0, std::min((uint8_t)255, g));
+            b = std::max((uint8_t)0, std::min((uint8_t)255, b));
+
+            color = (r << 16) | (g << 8) | b;
+        }
     };
 }
 
-static led_strip::Behavior _first_example = {};
+static led_strip::Behavior _first_example = { led_strip::Behavior::Mode::STATIC };
 
 class led_strip::Worker : public IWorker
 {
@@ -82,7 +110,11 @@ public:
     Behavior current_beh = {};
 
 private:
+    using leds_type = NeoPixelBus<NeoGrbFeature, NeoEsp32LcdX16Ws2812xMethod>;
+
     //CRGB leds[ESP_EXTERNAL_LED_STRIP_COUNT];
+    leds_type leds = leds_type(ESP_EXTERNAL_LED_STRIP_COUNT, ESP_EXTERNAL_LED_STRIP_PIN);
+    //NeoPixelAnimator animations = NeoPixelAnimator(PixelCount);
 };
 
 #endif  // LED_STRIP_WORKER_HPP_

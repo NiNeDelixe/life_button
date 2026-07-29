@@ -5,6 +5,10 @@
 void Bomb::start()
 {
     led_display::Worker::getInstance().clear();
+    led_bar::Worker::getInstance().turnOff();
+
+    led_bar::Worker::getInstance().setInt(options.defuse_option.get() / TIME_S(1), 1);
+
     button::Worker::getInstance().setOnPress(&Bomb::onPress);
     button::Worker::getInstance().setOnRelease(&Bomb::onRelease);
 
@@ -16,8 +20,6 @@ void Bomb::start()
     explode = false;
     defused = false;
     is_beepd = false;
-
-    HasCounter::clear();
 }
 
 void Bomb::update()
@@ -37,15 +39,10 @@ void Bomb::update()
 
 void Bomb::updatePlant()
 {
-    if (planted)
+    if (!checkIdle())
     {
         return;
     }
-
-    // if (!button::Worker::getInstance().isReleased())
-    // {
-    //     return;
-    // }
     
 
     if (button::Worker::getInstance().isPressed())
@@ -79,7 +76,7 @@ void Bomb::updatePlant()
 
 void Bomb::updateDefuse()
 {
-    if (!planted)
+    if (checkIdle())
     {
         return;
     }
@@ -103,44 +100,47 @@ void Bomb::updateDefuse()
             defused = true;
             is_beepd = false;
         }
+
+        led_bar::Worker::getInstance().setInt((options.defuse_option.get() - current_defusing_time) / TIME_S(1), 1);
     }
     else if(planted)
     {
         current_defusing_time = 0;
         is_beepd = false;
+        led_bar::Worker::getInstance().setInt(options.defuse_option.get() / TIME_S(1), 1, false);
     }
 }
 
 void Bomb::updateTimer()
 {
-    if (!planted)
+    if (checkIdle())
     {
         return;
     }
 
     EVERY_MS(1000)
     {
-        led_bar::Worker::getInstance().turnOff();
-        
         current_timer += 1000;
     }
-    
-    if (options.timer_option.get() - current_timer <= options.timer_option.get() / TIME_S(10))
+
+    const uint32_t blink_interval =
+        (options.timer_option.get() - current_timer <= options.timer_option.get() / TIME_S(10))
+            ? 500
+            : 1000;
+
+    EVERY_MS(blink_interval)
     {
-        EVERY_MS(500)
-        {
-            beeper::Worker::getInstance().singleBeep();
-            led_bar::Worker::getInstance().turnOn();
-        }
+        beeper::Worker::getInstance().singleBeep();
+    }
+
+    if ((millis() / blink_interval) % 2 == 0)
+    {
+        led_bar::Worker::getInstance().turnOn();
     }
     else
     {
-        EVERY_MS(1000)
-        {
-            beeper::Worker::getInstance().singleBeep();
-            led_bar::Worker::getInstance().turnOn();
-        }
-    }  
+        led_bar::Worker::getInstance().turnOff();
+    }
 
     if (planted)
     {
@@ -169,6 +169,26 @@ void Bomb::updateEnd()
         start();
         return;
     }
+}
+
+bool Bomb::checkIdle()
+{
+    return !defused && !explode && !planted;
+}
+
+bool Bomb::checkPlanted()
+{
+    return !defused && !explode && planted;
+}
+
+bool Bomb::checkExplode()
+{
+    return !defused && explode && !planted;
+}
+
+bool Bomb::checkDefused()
+{
+    return defused && !explode && !planted;
 }
 
 void Bomb::onPress()

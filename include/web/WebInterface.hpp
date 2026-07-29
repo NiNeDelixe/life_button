@@ -14,7 +14,7 @@ namespace web
     class WebInterface;
 };
 
-class web::WebInterface
+class web::WebInterface : public Updatable
 {
     DECLARE_CLASS(WebInterface)
 
@@ -25,7 +25,7 @@ public:
     ~WebInterface() = default;
 
     void onStart();
-    void update();
+    void update() override;
 
 private:
     char ssid[64];

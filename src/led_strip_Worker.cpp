@@ -10,6 +10,8 @@ led_strip::Worker::Worker()
     //     ESP_EXTERNAL_LED_STRIP_COLOR_ORDER
     // >(leds, ESP_EXTERNAL_LED_STRIP_COUNT);
     // FastLED.setBrightness(50);
+    leds.Begin();
+    leds.Show();
 }
 
 void led_strip::Worker::changeColor(int r, int g, int b)
@@ -28,6 +30,10 @@ void led_strip::Worker::changeColor(int address, int r, int g, int b)
 void led_strip::Worker::updateBehavor()
 {
     //FastLED.setBrightness(current_beh.brightness);
+    uint8_t r = (current_beh.color >> 16) & 0xFF;
+    uint8_t g = (current_beh.color >> 8) & 0xFF;
+    uint8_t b = current_beh.color & 0xFF;
+    RgbColor rgbColor = RgbColor(r, g, b);
 
     switch (current_beh.mode)
     {
@@ -38,7 +44,7 @@ void led_strip::Worker::updateBehavor()
         break;
 
     case led_strip::Behavior::Mode::OFF :
-        //FastLED.show();
+        leds.Show();
         break;
 
     case led_strip::Behavior::Mode::PULSE :
@@ -57,6 +63,14 @@ void led_strip::Worker::updateBehavor()
 
 void led_strip::Worker::update()
 {
-    //updateBehavor();
-    //FastLED.show();
+    updateBehavor();
+    leds.Show();
+    
+    // for (int i = 0; i < ESP_EXTERNAL_LED_STRIP_COUNT; i++) {
+
+    //     RgbColor rgbColor = RgbColor(255, 255, 255);
+    //     leds.SetPixelColor(i, rgbColor);
+    // }
+    // leds.Show();
+    
 }

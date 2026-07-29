@@ -3,7 +3,9 @@
 
 #include "core/core.hpp"
 
-class IWorker
+#include "utils/Updatable.hpp"
+
+class IWorker : public Updatable
 {
 public:
     IWorker() = default;

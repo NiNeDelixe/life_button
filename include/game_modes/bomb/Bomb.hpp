@@ -23,6 +23,10 @@ public:
     void updateDefuse();
     void updateTimer();
     void updateEnd();
+    bool checkIdle();
+    bool checkPlanted();
+    bool checkExplode();
+    bool checkDefused();
 
 public:
     static void onPress();

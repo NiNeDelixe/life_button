@@ -1,5 +1,7 @@
 #include "core/Polling.hpp"
 
+#include "utils/Updatable.hpp"
+
 GameModesManager Polling::mode_manager = {};
 
 void Polling::startUp()
@@ -10,6 +12,8 @@ void Polling::startUp()
     led_circuit::Worker::getInstance().singleRun();
     web::WebInterface::getInstance().onStart();
     led_display::Worker::getInstance().clear();
+
+    led_strip::Worker::getInstance().setBehavor(_first_example);
     
     led_bar::Worker::getInstance().turnOff();
 
@@ -21,16 +25,17 @@ void Polling::startUp()
 void Polling::poll()
 {
     Delay::update();
-    web::BoardsSync::getInstance().update();
-    web::WebInterface::getInstance().update();
-    led_circuit::Worker::getInstance().update();
-    button::led::Worker::getInstance().update();
-    beeper::Worker::getInstance().update();
-    led_bar::Worker::getInstance().update();
-    led_strip::Worker::getInstance().update();
-    button::Worker::getInstance().update();
-    rfid::Worker::getInstance().update();
-    lora::Worker::getInstance().update();
+
+    std::vector<Updatable*> snapshot;
+    {
+        std::lock_guard<std::mutex> lock(mutex());
+        snapshot = objects();
+    }
+    
+    for (auto* obj : snapshot) 
+    {
+        obj->update();
+    }
 
     // if (HasTimer* timer = (HasTimer*)(mode_manager.getCurrentGameMode()))
     //     timer->updateTimer();

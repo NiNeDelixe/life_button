@@ -26,6 +26,7 @@
 
 #include "utils/Delay.hpp"
 
+class Updatable;
 
 class Polling
 {
@@ -38,6 +39,29 @@ public:
     static void poll();
 
     static void delay(esp_time_t time);
+
+private:
+    friend class Updatable;
+
+    static std::vector<Updatable*>& objects() {
+        static std::vector<Updatable*> objs;
+        return objs;
+    }
+
+    static std::mutex& mutex() {
+        static std::mutex m;
+        return m;
+    }
+    static void registerObject(Updatable* const obj) {
+        std::lock_guard<std::mutex> lock(mutex());
+        objects().push_back(obj);
+    }
+
+    static void unregisterObject(Updatable* const obj) {
+        std::lock_guard<std::mutex> lock(mutex());
+        auto& objs = objects();
+        objs.erase(std::remove(objs.begin(), objs.end(), obj), objs.end());
+    }
 
 public:
     static GameModesManager mode_manager;

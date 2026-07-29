@@ -29,7 +29,9 @@ public:
     void turnOff();
     void changeState();
     void setText(const char* text);
-    void setText(const char* text, const int& line_num);
+    void setText(const char* text, const int& line_num, const bool& handle_backlight = true);
+    void setInt(const int& num, const int& line, const bool& handle_backlight = true);
+    void handleBacklight(const time_t& time = 2000);
     void clear();
 
 public:
@@ -39,6 +41,7 @@ private:
     bool state;
     LiquidCrystal_I2C lcd;  
     bool is_displayed_new_text;
+    int old_int;
     std::array<String, ESP_EXTERNAL_BAR_DISPLAY_LINE_COUNT> displayed_text;
 };
 
