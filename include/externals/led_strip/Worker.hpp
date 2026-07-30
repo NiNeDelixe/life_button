@@ -84,6 +84,7 @@ namespace led_strip
 }
 
 static led_strip::Behavior _first_example = { led_strip::Behavior::Mode::STATIC };
+static led_strip::Behavior _off_beh = { led_strip::Behavior::Mode::OFF };
 
 class led_strip::Worker : public IWorker
 {
@@ -95,6 +96,8 @@ private:
 public:
     ~Worker() = default;
 
+    using leds_type = NeoPixelBus<NeoGrbFeature, NeoEsp32LcdX16Ws2812xMethod>;
+
 public:
     void changeColor(int r, int g, int b);
     void changeColor(int address, int r, int g, int b); 
@@ -102,6 +105,7 @@ public:
 
 private:
     void updateBehavor();
+    void fillPixels(const size_t& start_index, const size_t& step, const size_t& pixels_count, const RgbColor& color);
 
 public:
     void update() override;
@@ -110,8 +114,6 @@ public:
     Behavior current_beh = {};
 
 private:
-    using leds_type = NeoPixelBus<NeoGrbFeature, NeoEsp32LcdX16Ws2812xMethod>;
-
     //CRGB leds[ESP_EXTERNAL_LED_STRIP_COUNT];
     leds_type leds = leds_type(ESP_EXTERNAL_LED_STRIP_COUNT, ESP_EXTERNAL_LED_STRIP_PIN);
     //NeoPixelAnimator animations = NeoPixelAnimator(PixelCount);

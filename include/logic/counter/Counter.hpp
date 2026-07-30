@@ -20,7 +20,7 @@ public:
 public:
 
 public:
-    int16_t count; 
+    eps_int16_t count; 
 };
 
 #endif  // COUNTER_COUNTER_HPP_

@@ -8,6 +8,7 @@
 #include "externals/IWorker.hpp"
 
 #include "externals/beeper/Options.hpp"
+#include "utils/Turnable.hpp"
 
 
 namespace beeper
@@ -17,7 +18,7 @@ namespace beeper
 
 using volume_t = int;
 
-class beeper::Worker : public IWorker
+class beeper::Worker : public IWorker, public Turnable
 {
     DECLARE_CLASS(Worker)
 
@@ -28,7 +29,17 @@ public:
     ~Worker() = default;
 
 public:
-    void changeWorkState(bool state);
+    void setState(bool state) override;
+    void turnOn() override
+    {
+        setState(true);
+        digitalWrite(ESP_EXTERNAL_BEEPER_PIN, BEEPER_DIGITAL_ON_OUTPUT);
+    }
+    void turnOff() override
+    {
+        setState(false);
+        digitalWrite(ESP_EXTERNAL_BEEPER_PIN, BEEPER_DIGITAL_OFF_OUTPUT);
+    }
 
     void beepSeconds(esp_time_t time);
     void singleBeep(esp_time_t time = 100);
@@ -39,7 +50,6 @@ public:
 private:
     BeeperOptions options;
     
-    bool state = false;
     bool active = false;
     esp_time_t m_time = 0;
     uint32_t start_time = 0;

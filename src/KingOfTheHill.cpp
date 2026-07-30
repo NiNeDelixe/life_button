@@ -16,8 +16,9 @@ void KingOfTheHill::start()
     button::Worker::getInstance().setOnPress(nullptr);
     button::Worker::getInstance().setOnRelease(nullptr);
 
+    led_strip::Worker::getInstance().setBehavor(_first_example);
     led_strip::Worker::getInstance().changeColor(255, 255, 255); //white
-    led_bar::Worker::getInstance().turnOn();
+    //led_bar::Worker::getInstance().turnOff();
 
     HasCounter::clear();
 
@@ -29,7 +30,7 @@ void KingOfTheHill::start()
 
 void KingOfTheHill::update()
 {
-    KingOfTheHill::updateTimer();
+    HasTimer::updateTimer();
 
     updateEndGame();
 
@@ -94,7 +95,8 @@ void KingOfTheHill::updatePoints()
     }
     
     //render points on top display or blink them
-    led_bar::Worker::getInstance().turnOff();
+    led_bar::Worker::getInstance().setText(getCount().toString(), 1);
+    //led_display::Worker::getInstance().setNumber(getCount());
 
     EVERY_T(1 * 1000ul, GT_MACRO_MILLIS, uint32_t)
     {

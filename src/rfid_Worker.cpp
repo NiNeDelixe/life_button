@@ -39,7 +39,7 @@ void rfid::Worker::update()
 
     tag_detected = true;
 
-    led_bar::Worker::getInstance().changeState();
+    //led_bar::Worker::getInstance().setText("Tag det", 1);
 }
 
 bool rfid::Worker::tagDetected()

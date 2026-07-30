@@ -8,7 +8,7 @@ button::led::Worker::Worker()
 
 void button::led::Worker::update()
 {
-    if (!state)
+    if (!turn_state)
     {
         digitalWrite(ESP_EXTERNAL_BUTTON_LED_PIN, HIGH);
     }
@@ -16,14 +16,4 @@ void button::led::Worker::update()
     {
         digitalWrite(ESP_EXTERNAL_BUTTON_LED_PIN, LOW);
     }
-}
-
-void button::led::Worker::setState(bool sate)
-{
-    this->state = state;
-}
-
-void button::led::Worker::changetState()
-{
-    this->state = !this->state;
 }

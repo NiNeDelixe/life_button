@@ -16,6 +16,8 @@ Worker::Worker()
         ESP_EXTERNAL_LORA_TX_PIN);
 
     waitForAuxReady();
+
+    goToSleep();
 }
 
 Worker::~Worker()
@@ -57,7 +59,9 @@ bool Worker::send(ISyncable* syncable, uint16_t address)
             if (!data.data)
                 return false;
 
+            wakeUp();
             serial.write(data.data, data.size);
+            goToSleep();
 
             return true;
         });
@@ -100,6 +104,16 @@ bool Worker::send(uint16_t address, const SendCallback& callback)
         return false;
 
     return callback(LoRaSerial);
+}
+
+void Worker::goToSleep()
+{
+    setMode(HIGH, HIGH);
+}
+
+void Worker::wakeUp()
+{
+    setMode(LOW, LOW);
 }
 
 void Worker::processReceivedData()
@@ -179,8 +193,6 @@ bool Worker::setMode(uint8_t m0, uint8_t m1)
 {
     digitalWrite(ESP_EXTERNAL_LORA_M0_PIN, m0);
     digitalWrite(ESP_EXTERNAL_LORA_M1_PIN, m1);
-
-    delay(10);
 
     return waitForAuxReady();
 }

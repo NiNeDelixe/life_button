@@ -36,6 +36,9 @@ public:
     void addISyncableClass(ISyncable* class_to_add);
     bool send(ISyncable* class_from_send, uint16_t target_address = 0xFFFF);
     bool send(uint16_t address, const SendCallback& callback);
+
+    void goToSleep();
+    void wakeUp();
     
     void setReceiveCallback(ReceiveCallback callback);
     void setTargetAddress(uint16_t address);

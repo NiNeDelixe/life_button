@@ -44,15 +44,18 @@ void led_strip::Worker::updateBehavor()
         break;
 
     case led_strip::Behavior::Mode::OFF :
-        leds.Show();
+        fillPixels(current_beh.start_index, current_beh.step, ESP_EXTERNAL_LED_STRIP_COUNT, RgbColor(0));
         break;
 
     case led_strip::Behavior::Mode::PULSE :
         break;
 
     case led_strip::Behavior::Mode::STATIC :
-        //fl::fill_solid(leds + current_beh.start_index, ESP_EXTERNAL_LED_STRIP_COUNT, CRGB(current_beh.color));
+    {
+        fillPixels(current_beh.start_index, current_beh.step, ESP_EXTERNAL_LED_STRIP_COUNT, rgbColor);
         break;
+    }
+        
 
     default:
         break;
@@ -61,16 +64,17 @@ void led_strip::Worker::updateBehavor()
     //fl::globalBrightness();
 }
 
+void led_strip::Worker::fillPixels(const size_t &start_index, const size_t& step, const size_t &pixels_count, const RgbColor &color)
+{
+    for (size_t i = start_index; i < pixels_count; i += step)
+    {
+        leds.SetPixelColor(i, color);
+    }
+    
+}
+
 void led_strip::Worker::update()
 {
     updateBehavor();
-    leds.Show();
-    
-    // for (int i = 0; i < ESP_EXTERNAL_LED_STRIP_COUNT; i++) {
-
-    //     RgbColor rgbColor = RgbColor(255, 255, 255);
-    //     leds.SetPixelColor(i, rgbColor);
-    // }
-    // leds.Show();
-    
+    leds.Show();   
 }

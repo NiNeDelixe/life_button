@@ -7,13 +7,14 @@
 #include <LiquidCrystal_I2C.h>
 
 #include "externals/IWorker.hpp"
+#include "utils/Turnable.hpp"
 
 namespace led_bar
 {
     class Worker;
 }
 
-class led_bar::Worker : public IWorker
+class led_bar::Worker : public IWorker, public Turnable
 {
     DECLARE_CLASS(Worker)
 
@@ -25,9 +26,8 @@ public:
 
 public:
     //void changeColor(int r, int g, int b);
-    void turnOn();
-    void turnOff();
-    void changeState();
+    void turnOn() override;
+    void turnOff() override;
     void setText(const char* text);
     void setText(const char* text, const int& line_num, const bool& handle_backlight = true);
     void setInt(const int& num, const int& line, const bool& handle_backlight = true);
@@ -38,7 +38,6 @@ public:
     void update() override;
 
 private:
-    bool state;
     LiquidCrystal_I2C lcd;  
     bool is_displayed_new_text;
     int old_int;

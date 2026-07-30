@@ -17,7 +17,7 @@ void led_bar::Worker::turnOn()
     {
         return;
     }
-    state = true;
+    setState(true);
     lcd.backlight();
 }
 
@@ -27,13 +27,8 @@ void led_bar::Worker::turnOff()
     {
         return;
     }
-    state = false;
+    setState(false);
     lcd.noBacklight();
-}
-
-void led_bar::Worker::changeState()
-{
-    state = !state;
 }
 
 void led_bar::Worker::setText(const char *text)
@@ -111,7 +106,7 @@ void led_bar::Worker::update()
     }
     
 
-    if (state)
+    if (turn_state)
     {
         lcd.backlight();
     }

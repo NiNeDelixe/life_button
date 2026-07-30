@@ -6,7 +6,7 @@
 #include "game_modes/point_farming/PointFarming.hpp"
 #include "game_modes/sync_start/SyncStart.hpp"
 
-//#include "core/Polling.hpp"
+#include "core/Polling.hpp"
 
 GameModesManager::GameModesManager()
     : SaveManager(nullptr, 0)
@@ -94,11 +94,13 @@ void GameModesManager::defaultSetupGamemode()
     led_bar::Worker::getInstance().clear();
     led_bar::Worker::getInstance().setText(to_string(m_current_gametype), 0);
 
-    //led_display::Worker::getInstance().clear();
+    led_display::Worker::getInstance().clear();
 
     //button::led::Worker::getInstance().turnOff();
     button::Worker::getInstance().setOnPress(nullptr);
     button::Worker::getInstance().setOnRelease(nullptr);
+
+    led_strip::Worker::getInstance().setBehavor(_off_beh);
 }
 
 void GameModesManager::saveCurrent() 
@@ -127,6 +129,8 @@ void GameModesManager::update()
 {
     if (m_current_gamemode)
     {
+        // if (HasTimer* timer = (HasTimer*)(m_current_gamemode))
+        //     timer->updateTimer();
         m_current_gamemode->update();
     }
 }

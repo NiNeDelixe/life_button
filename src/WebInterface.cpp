@@ -27,11 +27,11 @@ void web::WebInterface::onStart()
     WiFi.setTxPower(WIFI_POWER_8_5dBm);
 
     server.on("/", HTTP_GET, [](AsyncWebServerRequest *request){
-        request->send_P(200, "text/html", index_html);
+        request->send(200, "text/html", index_html);
     });
 
     server.on("/index.css", HTTP_GET, [](AsyncWebServerRequest *request){
-        request->send_P(200, "text/css", index_css);
+        request->send(200, "text/css", index_css);
     });
 
     server.on("/set", HTTP_GET, [](AsyncWebServerRequest *request){

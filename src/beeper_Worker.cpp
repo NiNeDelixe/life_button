@@ -17,9 +17,9 @@ beeper::Worker::Worker()
     digitalWrite(ESP_EXTERNAL_BEEPER_PIN, BEEPER_DIGITAL_OFF_OUTPUT);
 }
 
-void beeper::Worker::changeWorkState(bool state)
+void beeper::Worker::setState(bool state)
 {
-    this->state = state;
+    this->turn_state = state;
     if (!state) {
         digitalWrite(ESP_EXTERNAL_BEEPER_PIN, BEEPER_DIGITAL_OFF_OUTPUT);
         active = false;
@@ -39,7 +39,7 @@ void beeper::Worker::beepSeconds(esp_time_t time)
     m_time = time;
     start_time = millis();
     active = true;
-    state = true;
+    turn_state = true;
 
     digitalWrite(ESP_EXTERNAL_BEEPER_PIN, BEEPER_DIGITAL_ON_OUTPUT);
 }
@@ -69,7 +69,7 @@ void beeper::Worker::update()
     if ((millis() - start_time) >= m_time)
     {
         digitalWrite(ESP_EXTERNAL_BEEPER_PIN, BEEPER_DIGITAL_OFF_OUTPUT);
-        state = false;
+        turn_state = false;
         active = false;
     }
 }

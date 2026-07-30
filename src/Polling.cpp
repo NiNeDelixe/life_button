@@ -12,12 +12,15 @@ void Polling::startUp()
     led_circuit::Worker::getInstance().singleRun();
     web::WebInterface::getInstance().onStart();
     led_display::Worker::getInstance().clear();
+    rfid::Worker::getInstance();
 
     led_strip::Worker::getInstance().setBehavor(_first_example);
     
     led_bar::Worker::getInstance().turnOff();
 
     led_bar::Worker::getInstance().setText("test");
+
+    button::led::Worker::getInstance().turnOff();
 
     mode_manager.createSavedGamemode();
 }

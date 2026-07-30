@@ -9,12 +9,16 @@
 
 #include "Constants.hpp"
 
+#include "Integer.hpp"
+
 #define NOMINMAX
 
 #define CORE_VERSION "0.1.0"
 
 using esp_time_t = uint32_t;
 using esp_millis_t = uint32_t;
+using esp_int_t = Integer<>;
+using eps_int16_t = Integer<int16_t>;
 
 constexpr esp_time_t esp_time_t_max_value = 4294967295;
 
@@ -23,8 +27,8 @@ constexpr esp_time_t esp_time_t_max_value = 4294967295;
 #define INFO info
 //#define DEBUG debug
 
-#define STR(x) #x
-#define XSTR(x) STR(x)
+#define ESP_STR(x) #x
+#define XSTR(x) ESP_STR(x)
 
 #define LOG(severity, message)        \
     do {                             \
@@ -53,7 +57,9 @@ constexpr esp_time_t esp_time_t_max_value = 4294967295;
 
 #define DELETE_COPY(Class) \
 Class(const Class&) = delete; \
-void operator=(const Class&) = delete;
+void operator=(const Class&) = delete; \
+Class(Class&&) = delete; \
+Class& operator=(Class&&) = delete;
 
 #define DECLARE_CLASS(Class) \
 public: \

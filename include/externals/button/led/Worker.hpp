@@ -5,15 +5,17 @@
 
 #include "externals/IWorker.hpp"
 
+#include "utils/Turnable.hpp"
+
 namespace button
 {
-namespace led
-{
-    class Worker;
-}
+    namespace led
+    {
+        class Worker;
+    }
 }
 
-class button::led::Worker : public IWorker
+class button::led::Worker : public IWorker, public Turnable
 {
     DECLARE_CLASS(Worker)
 
@@ -24,14 +26,20 @@ public:
     ~Worker() = default;
 
 public:
+    void turnOn() override
+    {
+        setState(true);
+        digitalWrite(ESP_EXTERNAL_BUTTON_LED_PIN, LOW);
+    }
+    void turnOff() override 
+    {
+        setState(false);
+        digitalWrite(ESP_EXTERNAL_BUTTON_LED_PIN, HIGH);
+    }
     void update() override;
 
-public:
-    void setState(bool sate);
-    void changetState();
-
 private:
-    bool state = false;
+
 };
 
 #endif  // LED_WORKER_HPP_

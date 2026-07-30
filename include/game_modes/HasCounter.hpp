@@ -16,7 +16,7 @@ public:
 public:
     static void applyToCounter(const int& num, const Counter::operators& oper);
     static void applyToCounter(const int& counter, const int& num, const Counter::operators& oper);
-    static int getCount() { return m_current_counter->count; }
+    static eps_int16_t getCount() { return m_current_counter->count; }
     static void clear();
 
     static int addCounter();
