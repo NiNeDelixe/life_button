@@ -17,7 +17,7 @@ void KingOfTheHill::start()
     button::Worker::getInstance().setOnRelease(nullptr);
 
     led_strip::Worker::getInstance().setBehavor(_first_example);
-    led_strip::Worker::getInstance().changeColor(255, 255, 255); //white
+    led_strip::Worker::getInstance().changeColor(100, 100, 100); //white
     //led_bar::Worker::getInstance().turnOff();
 
     HasCounter::clear();
@@ -26,13 +26,72 @@ void KingOfTheHill::start()
 
     is_end_by_points = false;
     is_end_by_time = false;
+    m_register_mode = false;
+
+    m_current_team = -1;
+
+    led_bar::Worker::getInstance().setText("Register", 1);
 }
 
 void KingOfTheHill::update()
 {
     HasTimer::updateTimer();
 
-    updateEndGame();
+    // if (is_register_mode == false && button::Worker::getInstance().isPressedOnce())
+    // {
+    //     is_register_mode = true;
+    //     led_bar::Worker::getInstance().setText("Register cards..", 1);
+    // }
+
+    // if (is_register_mode == true && button::Worker::getInstance().isPressedOnce())
+    // {
+    //     auto res = m_teams.find(m_current_team);
+    //     if (res != m_teams.end() && res++ != m_teams.end())
+    //     {
+    //         m_current_team = *(res++);
+    //     }
+    //     else
+    //     {
+    //         m_current_team = registerTeam();
+    //     }
+        
+    // }
+
+    if (m_register_mode == true && button::Worker::getInstance().isPressedOnce())
+    {
+        changeRegisterTeam();
+    }
+    
+    
+    updateRegistering();
+
+    if (m_register_mode || m_uids.empty())
+    {
+        return;
+    }
+    
+    // EVERY_MS(100)
+    // {
+    //     m_is_holding = false;
+    // }
+    
+    if (!m_is_started && button::Worker::getInstance().isPressedOnce())
+    {
+        m_is_started = true;
+        led_bar::Worker::getInstance().setText("Game Started", 1);
+    }
+
+    if (!m_is_started)
+    {
+        return;
+    }
+    
+
+    if (updateEndGame())
+    {
+        return;
+    }
+    
 
     // CHANGE TEAM CONQUEST
     updateConquestTeam();
@@ -44,28 +103,59 @@ void KingOfTheHill::update()
 
 void KingOfTheHill::registerCards()
 {
+    // if (!rfid::Worker::getInstance().tagDetected())
+    // {
+    //     return;
+    // }
+    
+    // auto uid = rfid::Worker::getInstance().getUIDCard();
+
+    // for (size_t i = 0; i < m_uids.size(); i++)
+    // {
+    //     if (m_uids.find(uid) != m_uids.end())
+    //     {
+    //         // int team = registerTeam();
+
+    //         // if (team == -1)
+    //         // {
+    //         //     return;
+    //         // }
+            
+    //         m_uids.insert({uid, m_current_team});
+
+    //         led_bar::Worker::getInstance().setText("Card registered!", 1);
+    //     }
+    // }
+    
     if (!rfid::Worker::getInstance().tagDetected())
     {
         return;
     }
-    
+
     auto uid = rfid::Worker::getInstance().getUIDCard();
 
-    for (size_t i = 0; i < m_uids.size(); i++)
-    {
-        if (m_uids.find(uid) != m_uids.end())
-        {
-            int team = registerTeam();
+    // led_bar::Worker::getInstance().setText(
+    //         uid.toString(),
+    //         0
+    //     );
 
-            if (team == -1)
-            {
-                return;
-            }
-            
-            m_uids.insert({uid, team});
-        }
+
+    if (m_uids.find(uid) != m_uids.end())
+    {
+        return;
     }
-    
+
+
+    m_uids.insert({
+        uid,
+        m_current_team
+    });
+
+
+    led_bar::Worker::getInstance().setText(
+        "Card registered!",
+        1
+    );
 }
 
 int KingOfTheHill::registerTeam()
@@ -89,7 +179,7 @@ int KingOfTheHill::registerTeam()
 
 void KingOfTheHill::updatePoints()
 {
-    if (is_end_by_points)
+    if (is_end_by_points || m_current_team == -1)
     {
         return;
     }
@@ -118,6 +208,14 @@ void KingOfTheHill::updateConquestTeam()
         hold_time = 0;
         return;
     }
+
+    if (options.hold_time.get() == 0)
+    {
+        changeConquestTeam();
+        return;
+    }
+    
+    
 
     //render timer on number display
     led_display::Worker::getInstance().setNumber(hold_time / 1000);
@@ -170,25 +268,27 @@ void KingOfTheHill::updateTimer()
     
 }
 
-void KingOfTheHill::updateEndGame()
+bool KingOfTheHill::updateEndGame()
 {
     if (is_end_by_points)
     {
         //beep
         beeper::Worker::getInstance().beepSeconds(TIME_S(10));
-        start();
-        return;
+        led_bar::Worker::getInstance().setText("Game end points!", 1);
+        //start();
+        return true;
     }
 
     if (is_end_by_time)
     {
         //beep
         beeper::Worker::getInstance().beepSeconds(TIME_S(10));
-        start();
-        return;
+        led_bar::Worker::getInstance().setText("Game end by time", 1);
+        //start();
+        return true;
     }
     
-    
+    return false;
 }
 
 void KingOfTheHill::updateSound()
@@ -198,6 +298,35 @@ void KingOfTheHill::updateSound()
     {
         beeper::Worker::getInstance().beepSeconds(TIME_S(1));
     }
+}
+
+void KingOfTheHill::updateRegistering()
+{
+    // if (!m_register_mode)
+    // {
+    //     return;
+    // }
+
+    // led_bar::Worker::getInstance().setText(m_current_team.toString() , 1);
+    
+    
+    // registerCards();
+
+    if (!m_register_mode)
+    {
+        return;
+    }
+
+    led_bar::Worker::getInstance().setText(
+        m_current_team.toString(),
+        1
+    );
+
+    registerCards();
+}
+
+bool KingOfTheHill::isHoldToStart()
+{
 }
 
 void KingOfTheHill::changeConquestTeam()
@@ -213,5 +342,74 @@ void KingOfTheHill::changeConquestTeam()
     {
         m_current_team = m_uids[uid];
         //change team color on led strip
+        if (m_current_team == 1)
+        {
+            led_strip::Worker::getInstance().changeColor(255, 0, 0);
+        }
+        if (m_current_team == 2)
+        {
+            led_strip::Worker::getInstance().changeColor(0, 0, 255);
+        }
+    }
+}
+
+void KingOfTheHill::toggleRegistering()
+{
+    if (m_register_mode)
+    {
+        stopRegistering();
+    }
+    else
+    {
+        startRegistering();
+    }
+}
+
+void KingOfTheHill::startRegistering()
+{
+    m_register_mode = true;
+
+    if (m_current_team == -1)
+    {
+        m_current_team = registerTeam();
+    }
+
+    led_bar::Worker::getInstance().setText(
+        "Register cards",
+        1
+    );
+}
+
+void KingOfTheHill::stopRegistering()
+{
+    m_register_mode = false;
+
+    led_bar::Worker::getInstance().setText(
+        "Ready",
+        1
+    );
+
+    m_current_team = -1;
+}
+
+void KingOfTheHill::changeRegisterTeam()
+{
+    auto it = m_teams.find(m_current_team);
+
+    if (it == m_teams.end())
+    {
+        m_current_team = registerTeam();
+        return;
+    }
+
+    ++it;
+
+    if (it == m_teams.end())
+    {
+        m_current_team = registerTeam();
+    }
+    else
+    {
+        m_current_team = *it;
     }
 }

@@ -5,6 +5,13 @@
 
 using RGBColorOption = StaticArrayOption<int, 3>;
 
+struct RegisterTeam
+{
+    String name;
+    uint32_t color;
+    std::vector<String> cards;
+};
+
 struct KOTHOptions : public GameModeOptions
 {
     // ArrayOption<RGBColorOption> team_color = {{ 255, 255, 255 }}; 
@@ -12,7 +19,7 @@ struct KOTHOptions : public GameModeOptions
     TimeOption hold_time = { TIME_S(5) };
     TimeOption game_time = { esp_time_t_max_value };
     IntOption points_to_win = { 10000 };
-    IntOption points_multiplier = { 5 };
+    IntOption points_multiplier = { 1 };
 
     FlagOption is_need_to_hold_button = { false };
 

@@ -33,6 +33,7 @@ public:
 public:
     GameMode* m_current_gamemode = nullptr;
     GameModeType m_current_gametype = GameModeType::BOMB;
+    esp_int_t m_modes_count = 5;
 };
 
 #endif // GAME_MODES_GAME_MODES_MANAGER_HPP_

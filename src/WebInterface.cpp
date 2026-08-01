@@ -8,6 +8,7 @@
 
 #include "pre_builded_headers/index_html.h"
 #include "pre_builded_headers/index_css.h"
+#include "pre_builded_headers/index_js.h"
 
 AsyncWebServer server(80);
 
@@ -34,6 +35,10 @@ void web::WebInterface::onStart()
         request->send(200, "text/css", index_css);
     });
 
+    server.on("/index.js", HTTP_GET, [](AsyncWebServerRequest *request){
+        request->send(200, "text/js", index_js);
+    });
+
     server.on("/set", HTTP_GET, [](AsyncWebServerRequest *request){
         if (request->hasParam("value")) {
             int v = request->getParam("value")->value().toInt();
@@ -50,6 +55,23 @@ void web::WebInterface::onStart()
     server.onNotFound([](AsyncWebServerRequest *request){
         Serial.print("404");
         request->send(404, "text/plain", "Not found");
+    });
+
+    server.on("/api/koth/register/toggle", HTTP_POST, [](AsyncWebServerRequest *request){
+        
+        KingOfTheHill* koth = (KingOfTheHill*)Polling::mode_manager.getCurrentGameMode();
+
+        if (koth)
+        {
+            koth->toggleRegistering();
+        }
+        else
+        {
+            request->send(500, "text/plain", "Current Game mode is not King of the hill");
+            return;
+        }
+
+        request->send(200, "text/plain", "OK");
     });
 
     server.on("/getCurrentMode", HTTP_GET, [](AsyncWebServerRequest *request) {
@@ -69,59 +91,147 @@ void web::WebInterface::onStart()
         request->send(200, "text/plain", "OK");
     });
 
+    server.on("/modes", HTTP_GET, [](AsyncWebServerRequest *request) {
+        String json;
+
+        json = "[";
+
+        for (esp_int_t i = 0; i < Polling::mode_manager.m_modes_count; i += 1)
+        {
+            json += "{";
+            json += "\"id\":";
+            json += i.toString();
+            json += ",\"name\":\"";
+            json += to_string((GameModeType)i.operator int());
+            json += "\"}";
+
+            if (i < Polling::mode_manager.m_modes_count - 1)
+            {
+                json += ",";
+            }
+            
+        }
+
+        json += "]";
+        
+        request->send(200, "application/json", json);
+    });
+
     server.on("/mode", HTTP_GET, [](AsyncWebServerRequest *request){
         int type = request->getParam("type")->value().toInt();
 
-        // GameMode* mode = nullptr;
-        // Polling::mode_manager.crateGameMode((GameModeType)type);
-
         // json what settings mode has and default number
         String json;
+
+        json += "[";
+
         switch ((GameModeType)type)
         {
         case GameModeType::LIFES :
-            json = "{";
-            json += "\"lifes\":70,";
-            json += "\"timer\":4294967.294";
+            
+            
+            json += "{";
+            json += "\"name\":\"lifes\",";
+            json += "\"type\":\"int\",";
+            json += "\"value\":70";
+            json += "},";
+
+            json += "{";
+            json += "\"name\":\"timer\",";
+            json += "\"type\":\"int\",";
+            json += "\"value\":4294967.294";
             json += "}";
             break;
         case GameModeType::POINT :
-            json = "{";
-            json += "\"timer\":4294967.294,";
-            json += "\"operation_value\":1,";
-            json += "\"start_value\":0,";
-            json += "\"operation_type\":[0,1,2]";
+            json += "{";
+            json += "\"name\":\"timer\",";
+            json += "\"type\":\"int\",";
+            json += "\"value\":4294967.294";
+            json += "},";
+
+            json += "{";
+            json += "\"name\":\"operation_value\",";
+            json += "\"type\":\"int\",";
+            json += "\"value\":1";
+            json += "},";
+
+            json += "{";
+            json += "\"name\":\"start_value\",";
+            json += "\"type\":\"int\",";
+            json += "\"value\":0";
+            json += "},";
+
+            json += "{";
+            json += "\"name\":\"operation_type\",";
+            json += "\"type\":\"array\",";
+            json += "\"value\":[0,1,2]";
             json += "}";
             break;
         
         case GameModeType::BOMB :
-            json = "{";
-            json += "\"timer\":45,";
-            json += "\"defuse\":10,";
-            json += "\"plant\":3.2";
+            json += "{";
+            json += "\"name\":\"timer\",";
+            json += "\"type\":\"int\",";
+            json += "\"value\":45";
+            json += "},";
+
+            json += "{";
+            json += "\"name\":\"defuse\",";
+            json += "\"type\":\"int\",";
+            json += "\"value\":10";
+            json += "},";
+
+            json += "{";
+            json += "\"name\":\"plant\",";
+            json += "\"type\":\"int\",";
+            json += "\"value\":3.2";
             json += "}";
             break;
         
         case GameModeType::KOTH :
-            json = "{";
-            json += "\"game_time\":4294967.294,";
-            json += "\"hold_time\":5,";
-            json += "\"points_multiplier\":1,";
-            json += "\"is_need_to_hold_button\":false,";
-            json += "\"points_to_win\":10000";
+            json += "{";
+            json += "\"name\":\"game_time\",";
+            json += "\"type\":\"int\",";
+            json += "\"value\":4294967.294";
+            json += "},";
+
+            json += "{";
+            json += "\"name\":\"hold_time\",";
+            json += "\"type\":\"int\",";
+            json += "\"value\":5";
+            json += "},";
+
+            json += "{";
+            json += "\"name\":\"points_multiplier\",";
+            json += "\"type\":\"int\",";
+            json += "\"value\":1";
+            json += "},";
+
+            json += "{";
+            json += "\"name\":\"is_need_to_hold_button\",";
+            json += "\"type\":\"bool\",";
+            json += "\"value\":false";
+            json += "},";
+
+            json += "{";
+            json += "\"name\":\"points_to_win\",";
+            json += "\"type\":\"int\",";
+            json += "\"value\":10000";
             json += "}";
             break;
 
         case GameModeType::SYNC_START :
-            json = "{";
-            json += "\"timer\":5";
+            json += "{";
+            json += "\"name\":\"timer\",";
+            json += "\"type\":\"int\",";
+            json += "\"value\":5";
             json += "}";
             break;
 
         default:
-            json = "{}";
             break;
         }
+        json += "]";
 
         request->send(200, "application/json", json);
     });

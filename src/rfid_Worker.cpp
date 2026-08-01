@@ -26,20 +26,13 @@ void rfid::Worker::update()
         m_rfid.PCD_Init();
     }
 
-    if (!m_rfid.PICC_IsNewCardPresent()) 
-    {
-        tag_detected = false;
-        return;
-    }
-    if (!m_rfid.PICC_ReadCardSerial()) 
+    if (!m_rfid.PICC_IsNewCardPresent() || !m_rfid.PICC_ReadCardSerial()) 
     {
         tag_detected = false;
         return;
     }
 
     tag_detected = true;
-
-    //led_bar::Worker::getInstance().setText("Tag det", 1);
 }
 
 bool rfid::Worker::tagDetected()
@@ -51,7 +44,7 @@ MFRC522::MIFARE_Key rfid::Worker::getDetectedCard()
 {
     if (tagDetected())
     {
-        /* code */
+        return m_key;
     }
     
     return MFRC522::MIFARE_Key();
@@ -59,12 +52,14 @@ MFRC522::MIFARE_Key rfid::Worker::getDetectedCard()
 
 rfid::Worker::UID rfid::Worker::getUIDCard()
 {
-    if (tagDetected())
+    auto uid = rfid::Worker::UID();
+    //uid.raw_data = {m_key.keyByte[0], m_key.keyByte[1], m_key.keyByte[2], m_key.keyByte[3], m_key.keyByte[4], m_key.keyByte[5]};
+    uid.raw_data = 
     {
-        auto uid = rfid::Worker::UID();
-        uid.raw_data = m_key.keyByte;
-        return uid;
-    }
-
-    return rfid::Worker::UID();
+        m_rfid.uid.uidByte[0], m_rfid.uid.uidByte[1], m_rfid.uid.uidByte[2], 
+        m_rfid.uid.uidByte[3], m_rfid.uid.uidByte[4], m_rfid.uid.uidByte[5], 
+        m_rfid.uid.uidByte[6], m_rfid.uid.uidByte[7], m_rfid.uid.uidByte[8], 
+        m_rfid.uid.uidByte[9]
+    };
+    return uid;
 }

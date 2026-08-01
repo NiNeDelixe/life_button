@@ -212,6 +212,80 @@ private:
     size_t choise = 0;
 };
 
+template<>
+class ArrayOption<char> : public IOption<char*>
+{
+public:
+    ArrayOption() : size(0)
+    {
+        this->value = nullptr;
+    }
+
+    ArrayOption(const char* str)
+    {
+        set(str);
+    }
+
+    ArrayOption(const ArrayOption& other)
+    {
+        set(other.value);
+    }
+
+    ArrayOption& operator=(const ArrayOption& other)
+    {
+        if (this != &other)
+            set(other.value);
+        return *this;
+    }
+
+    ~ArrayOption()
+    {
+        delete[] this->value;
+    }
+
+public:
+    void set(const char* str)
+    {
+        delete[] this->value;
+
+        if (!str)
+        {
+            this->value = nullptr;
+            size = 0;
+            return;
+        }
+
+        size = strlen(str) + 1;
+        this->value = new char[size];
+        memcpy(this->value, str, size);
+    }
+
+    void set(char* const& str) override
+    {
+        set((const char*)str);
+    }
+
+    char* getArray() const
+    {
+        return this->value;
+    }
+
+    size_t getSize() const
+    {
+        return size;
+    }
+
+    const char* toString() const override
+    {
+        return this->value ? this->value : "";
+    }
+
+private:
+    size_t size = 0;
+};
+
+using StringOption = ArrayOption<char>;
+
 // template<class TYPE>
 // class VectorOption : public IOption<std::vector<TYPE>>
 // {

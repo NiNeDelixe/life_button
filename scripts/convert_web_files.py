@@ -23,7 +23,7 @@ def generate(var_name, data):
 
 def convert():
     for file in os.listdir(SRC_DIR):
-        if not (file.endswith(".html") or file.endswith(".css")):
+        if not (file.endswith(".html") or file.endswith(".css") or file.endswith(".js")):
             continue
 
         in_path = os.path.join(SRC_DIR, file)
